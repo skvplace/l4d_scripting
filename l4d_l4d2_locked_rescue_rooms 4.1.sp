@@ -23,7 +23,7 @@ public Plugin:myinfo =
 	url 		= 	"https://forums.alliedmods.net/showthread.php?p=2825973#post2825973"
 }
 
-bool DEBUG 			= false;
+bool DEBUG 		= false;
 bool DEBUG_SPRITE 	= false;
 bool DEBUG_CALL 	= false;
 bool DEBUG_MODE		= false;
@@ -32,20 +32,20 @@ bool DEBUG_SCAN		= false;
 bool DEBUG_OPENDIR	= false;
 bool DEBUG_RENAME	= false;
 
-#define MAX_PLAYERS 				18
-#define MAX_ENTITIES				4096
+#define MAX_PLAYERS 			18
+#define MAX_ENTITIES			4096
 
 #define MAX_CLASSNAME_LENGTH 		64
-#define MAX_STRING_LENGTH			128
+#define MAX_STRING_LENGTH		128
 
 #define ROOM_SCAN_MAX_DISTANCE 		1000.0
-#define ROOM_NAME 					"lr_room_rescue"
-#define MAX_TIMERS					128
+#define ROOM_NAME 			"lr_room_rescue"
+#define MAX_TIMERS			128
 
-int 	gi_waiting_rooms			[MAX_TIMERS + 1];
-int 	gi_active_rescue			[MAX_TIMERS + 1][2];
+int 	gi_waiting_rooms		[MAX_TIMERS + 1];
+int 	gi_active_rescue		[MAX_TIMERS + 1][2];
 
-char 	gs_glow_model[]				= "sprites/glow01.vmt";
+char 	gs_glow_model[]			= "sprites/glow01.vmt";
 
 ConVar 	gc_handle_color_locked;
 ConVar 	gc_handle_color_unlocked;
@@ -55,7 +55,7 @@ ConVar 	gc_force_open_distance;
 ConVar 	gc_force_doors_speed;
 ConVar 	gc_rescue_mode;
 
-#define DOOR_HANDLE_NAME 			"lr_door_handle_sprite"
+#define DOOR_HANDLE_NAME 		"lr_door_handle_sprite"
 char 	gs_handle_color_locked		[16];
 char 	gs_handle_color_unlocked	[16];
 
@@ -68,7 +68,7 @@ bool 	gb_mission_lost;
 
 Handle 	gk_unlocked_doors;
 Handle 	gk_rooms;
-Handle 	gt_Timers					[MAX_TIMERS + 1];
+Handle 	gt_Timers			[MAX_TIMERS + 1];
 
 
 
