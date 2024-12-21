@@ -61,7 +61,7 @@ bool 	gb_respawn_outside_rescue;
 float 	gf_origin_dead_survivor[MAX_PLAYERS + 1][3];
 
 #define MAX_RESCUE				64
-int 	gi_rescue_vectors		[MAX_RESCUE + 1][7];
+int 	gi_rescue_vectors		[MAX_RESCUE + 1][7]; 
 
 // TEENGIRL SOUNDS
 char 	gs_sound_TeenGirl[][] =
