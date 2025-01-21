@@ -18,7 +18,7 @@ public Plugin:myinfo =
 {
 	name 		= 	"[L4D/L4D2] Locked rescue rooms",
 	author 		= 	"Skv",
-	description = 	"Player respawn doors are locked until respawn",
+	description 	= 	"Player respawn doors are locked until respawn",
 	version 	= 	"4.1",
 	url 		= 	"https://forums.alliedmods.net/showthread.php?p=2825973#post2825973"
 }
