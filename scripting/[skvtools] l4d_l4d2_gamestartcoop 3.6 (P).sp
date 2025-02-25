@@ -47,7 +47,7 @@ public Plugin:myinfo =
 	name 		= "[skvtools] l4d_l4d2_gamestartcoop",
 	author 		= "Skv",
 	description = "Сreates a global forwards in coop mode",
-	version 	= "3.6 (P)",
+	version 	= "3.6 (Public)",
 	url 		= ""
 }
 
