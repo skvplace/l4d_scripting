@@ -18,7 +18,7 @@ public Plugin:myinfo =
 	name 		= "[skvtools] l4d_survivorid",
 	author 		= "Skv",
 	description = "Creates and manages survivorid - the survivor's body identifier",
-	version 	= "1.4 (P)",
+	version 	= "1.4 (Public)",
 	url 		= ""
 }
 
