@@ -20,7 +20,7 @@ public Plugin:myinfo =
 	name 		= "[L4D/L4D2] Respawn Final",
 	author 		= "Skv",
 	description = "The plugin allows survivors to respawn in the finale",
-	version 	= "1.5.4 (P)",
+	version 	= "1.5.4 (Public)",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2829933#post2829933"
 }
 
