@@ -112,9 +112,12 @@ bool IsClientSurvivor(int client)
 		char client_name[MAX_NAME_LENGTH];
 		FormatEx(client_name, sizeof(client_name), "%N", client);
 		
-		if (StrContains(client_name, "smoker", false) > -1 ||
+		if (	StrContains(client_name, "smoker", false) > -1 ||
 			StrContains(client_name, "boomer", false) > -1 ||
 			StrContains(client_name, "hunter", false) > -1 ||
+			StrContains(client_name, "charger", false) > -1 ||
+			StrContains(client_name, "jockey", false) > -1 ||
+			StrContains(client_name, "spitter", false) > -1 ||
 			StrContains(client_name, "tank", false) > -1)
 		{
 			return false;
