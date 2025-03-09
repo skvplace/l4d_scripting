@@ -17,13 +17,13 @@ public Plugin:myinfo =
 {
 	name 		= "[skvtools] l4d_survivorid",
 	author 		= "Skv",
-	description = "Creates and manages survivorid - the survivor's body identifier",
+	description 	= "Creates and manages survivorid - the survivor's body identifier",
 	version 	= "1.4",
 	url 		= ""
 }
 
 #define MAX_PLAYERS 	18
-int 	gi_user			[MAX_SURVIVORID + 1];
+int 	gi_user		[MAX_SURVIVORID + 1];
 
 public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max)
 {
