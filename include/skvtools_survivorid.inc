@@ -21,7 +21,7 @@ native int GetSurvivorUserId(int survivorid);
  * userid 	- userid выжившего
  * return 	- survivorid выжившего или 0, если не действующий
 */
-native int GetSurvivorOfUserId(int survivorid); 
+native int GetSurvivorOfUserId(int userid); 
 
 /**
  * Возвращает survivorid выжившего
