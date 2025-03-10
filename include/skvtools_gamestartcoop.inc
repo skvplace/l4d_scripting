@@ -15,32 +15,32 @@
 native int FireChangeLevel(char [] map, char [] reason);
 
 /**
- * Срабатывает, когда начинается gameplay в режиме coop, отправляет плагин [skvtools] gamestartcoop 1.1 +
+ * Срабатывает, когда начинается gameplay в режиме coop
  * stage 		- номер учередности загрузки (секунды)
  */
 forward void OnGameplayStart(int stage);
 
 /**
- * Срабатывает, когда сервер покидает последний игрок, отправляет плагин [skvtools] gamestartcoop 1.3 +
+ * Срабатывает, когда сервер покидает последний игрок
  */
 forward void OnServerEmpty();
 
 /**
- * Срабатывает, когда меняется карта, отправляет плагин [skvtools] gamestartcoop 1.3 +
+ * Срабатывает, когда меняется карта
  */
 forward void OnMapTransit();
 
 /**
- * Срабатывает, когда меняется карта, отправляет плагин [skvtools] l4d_gamestartcoop 1.3 +
+ * Срабатывает, когда карта перезагружается
  */
 forward void OnMapRestart();
 
 /**
- * Срабатывает, когда меняется карта, отправляет плагин [skvtools] l4d_gamestartcoop 3.4 +
+ * Срабатывает, когда спасательный транспорт покидает финал
  */
 forward void OnEscapeVehicleLeaving();
 
 /**
- * Срабатывает, когда меняется миссия, отправляет плагин [L4D] Dop Map Vote 1.4 +
+ * Срабатывает, когда меняется миссия
  */
 forward void OnChangeLevel(char [] map);
