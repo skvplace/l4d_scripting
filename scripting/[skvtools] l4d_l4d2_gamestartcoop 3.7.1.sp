@@ -19,7 +19,7 @@ public Plugin:myinfo =
 {
 	name 		= "[skvtools] l4d_l4d2_gamestartcoop",
 	author 		= "Skv",
-	description = "Сreates a global forwards in coop mode",
+	description 	= "Сreates a global forwards in coop mode",
 	version 	= "3.7.1",
 	url 		= ""
 }
@@ -34,17 +34,17 @@ bool 			gb_change_level;
 Handle 			gt_GameplayStart;
 Handle 			gt_GameplayStart_Stage;
 
-GlobalForward 	gF_OnGameplayStart;
-GlobalForward 	gF_OnMapTransit;
-GlobalForward 	gF_OnMapRestart;
-GlobalForward 	gF_OnChangeLevel;
-GlobalForward 	gF_OnServerEmpty;
-GlobalForward 	gF_OnEscapeVehicleLeaving;
+GlobalForward 		gF_OnGameplayStart;
+GlobalForward 		gF_OnMapTransit;
+GlobalForward 		gF_OnMapRestart;
+GlobalForward 		gF_OnChangeLevel;
+GlobalForward 		gF_OnServerEmpty;
+GlobalForward 		gF_OnEscapeVehicleLeaving;
 
 ConVar 			gc_server_console;
 
-#define 		MAX_TIMERS					4
-Handle 			gt_Timers					[MAX_TIMERS + 1];
+#define 		MAX_TIMERS				4
+Handle 			gt_Timers				[MAX_TIMERS + 1];
 
 public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max)
 {
@@ -504,12 +504,12 @@ int GetFreeTimerSlot()
 }
 
 /**
- * Проверяет клиента команды 2
+ * Проверяет клиента 
  *
  * client 		- Client index.
  * return 		- true если client valid и false если нет
  */
-stock bool IsValidClient(int client)
+bool IsValidClient(int client)
 {
 	if (client > 0  && client <= MAX_PLAYERS)
 	{
@@ -527,7 +527,7 @@ stock bool IsValidClient(int client)
  * message 		- сообщение
  * any ... 		- параметры функции
  */
-stock void PrintToServerPlugin(char [] message, any ...)
+void PrintToServerPlugin(char [] message, any ...)
 {
 	SetGlobalTransTarget(LANG_SERVER);
 	
