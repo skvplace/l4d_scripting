@@ -26,7 +26,7 @@ forward void OnGameplayStart(int stage);
 forward void OnServerEmpty();
 
 /**
- * Срабатывает, когда меняется карта
+ * Срабатывает, когда принудительно меняется карта
  */
 forward void OnMapTransit();
 
