@@ -52,6 +52,11 @@ public OnPluginStart()
 	HookEvent("bot_player_replace", Event_bot_player_replace, EventHookMode_Pre);
 }
 
+public OnMapStart()
+{
+	ClearAllSurvivorId();
+}
+
 public OnServerEmpty()
 {
 	ClearAllSurvivorId();
@@ -130,7 +135,6 @@ void ClearAllSurvivorId()
 	}
 }
 
-//бот заменил игрока
 void Event_player_bot_replace(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	int client = GetClientOfUserId(GetEventInt(event, "player"));
@@ -150,7 +154,6 @@ void Event_player_bot_replace(Handle:event, const String:name[], bool:dontBroadc
 	}
 }
 
-//игрок заменил бота
 void Event_bot_player_replace(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	int client = GetClientOfUserId(GetEventInt(event, "player"));
@@ -166,6 +169,14 @@ void Event_bot_player_replace(Handle:event, const String:name[], bool:dontBroadc
 
 		gi_user[i] = GetClientUserId(client);
 				
+		return;
+	}
+
+	i = GetSurvivorID(client);
+	if (i)
+	{
+		RemoveSurvivorID(bot);
+
 		return;
 	}
 }
