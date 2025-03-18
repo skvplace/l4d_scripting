@@ -19,7 +19,7 @@ public Plugin:myinfo =
 {
 	name 		= "[L4D/L4D2] Respawn Final",
 	author 		= "Skv",
-	description = "The plugin allows survivors to respawn in the finale",
+	description 	= "The plugin allows survivors to respawn in the finale",
 	version 	= "1.5.4",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2829933#post2829933"
 }
@@ -27,7 +27,7 @@ public Plugin:myinfo =
 #define MAX_PLAYERS 				18
 #define MAX_STRING_LENGTH			128
 
-#define GLOW_NAME 					"rf_rescue_glow"
+#define GLOW_NAME 				"rf_rescue_glow"
 #define VISIBLE_HEIGH				80.0
 #define VISIBLE_HEIGH_INCAP			30.0
 
@@ -40,8 +40,8 @@ Handle 	gt_CheckClientDead			[MAX_PLAYERS + 1];
 Handle 	gt_CreateRescue				[MAX_PLAYERS + 1];
 
 
-#define MAX_TIMERS					MAX_PLAYERS * 4
-Handle 	gt_Timer					[MAX_TIMERS + 1];
+#define MAX_TIMERS				MAX_PLAYERS * 4
+Handle 	gt_Timer				[MAX_TIMERS + 1];
 
 bool 	gb_finale_start;
 bool 	gb_rescue_spawn;
@@ -56,17 +56,17 @@ int 	gi_respawn_mode_finale;
 bool 	gb_respawn_outside_rescue;
 float 	gf_respawn_outside_time;
 
-float 	gv_origin_dead_survivor		[MAX_PLAYERS + 1][3];
+float 	gv_origin_dead_survivor			[MAX_PLAYERS + 1][3];
 
-#define MAX_RESCUE					64
-int 	gi_rescue					[MAX_RESCUE + 1];
+#define MAX_RESCUE				64
+int 	gi_rescue				[MAX_RESCUE + 1];
 
 float 	gv_rescue_origin			[MAX_RESCUE + 1][3];
 float 	gv_rescue_angles			[MAX_RESCUE + 1][3];
 
 #define MAX_FINAL_RESCUES			3
-int 	gi_final_rescue_slot		[MAX_FINAL_RESCUES + 1];
-int 	gi_final_rescue_slot_client	[MAX_FINAL_RESCUES + 1];
+int 	gi_final_rescue_slot			[MAX_FINAL_RESCUES + 1];
+int 	gi_final_rescue_slot_client		[MAX_FINAL_RESCUES + 1];
 
 char 	gs_chance_rescue_slot[3];
 
