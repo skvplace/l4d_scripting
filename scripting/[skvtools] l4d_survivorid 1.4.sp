@@ -1,7 +1,7 @@
 /**
  * ========================================================================
  * Plugin [skvtools] survivorid
- * Creates and manages survivorid - the survivor's body identifier
+ * Creates and manages survivorid - the survivor's identifier
  * ========================================================================
  *
  * This program is free software; you can redistribute it and/or modify it.
@@ -17,7 +17,7 @@ public Plugin:myinfo =
 {
 	name 		= "[skvtools] l4d_survivorid",
 	author 		= "Skv",
-	description 	= "Creates and manages survivorid - the survivor's body identifier",
+	description 	= "Creates and manages survivorid - the survivor's identifier",
 	version 	= "1.4",
 	url 		= ""
 }
