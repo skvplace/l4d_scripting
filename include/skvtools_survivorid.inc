@@ -10,7 +10,7 @@
 /**
  * Возвращает userid выжившего
  *
- * survivorid 	- номер слота выжившего
+ * survivorid 	- survivorid выжившего
  * return 	- userid выжившего или 0, если не действующий
 */
 native int GetSurvivorUserId(int survivorid);
