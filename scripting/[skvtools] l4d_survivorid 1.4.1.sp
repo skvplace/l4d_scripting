@@ -141,7 +141,7 @@ void Event_player_bot_replace(Handle:event, const String:name[], bool:dontBroadc
 	if (!IsValidClient(client)) {return;}
 	
 	int bot = GetClientOfUserId(GetEventInt(event, "bot"));
-	if (!IsValidClient(client)) {return;}
+	if (!IsValidClient(bot)) {return;}
 	
 	int i = GetSurvivorID(client);
 	if (i)
@@ -163,7 +163,7 @@ void Event_bot_player_replace(Handle:event, const String:name[], bool:dontBroadc
 	if (!IsValidClient(client)) {return;}
 	
 	int bot = GetClientOfUserId(GetEventInt(event, "bot"));
-	if (!IsValidClient(client)) {return;}
+	if (!IsValidClient(bot)) {return;}
 	
 	int i = GetSurvivorID(bot);
 	if (i)
