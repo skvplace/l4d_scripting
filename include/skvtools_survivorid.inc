@@ -8,33 +8,33 @@
 #define MAX_SURVIVORID 18
 
 /**
- * Возвращает userid выжившего
+ * Возвращает user id
  *
- * survivorid 	- survivorid выжившего
- * return 	- userid выжившего или 0, если не действующий
+ * survivorid 	- survivor id
+ * return 		- user id или 0, если не действующий
 */
 native int GetSurvivorUserId(int survivorid);
 
 /**
- * Возвращает survivorid выжившего
+ * Возвращает survivor id
  *
- * userid 	- userid выжившего
- * return 	- survivorid выжившего или 0, если не действующий
+ * userid 		- user id 
+ * return 		- survivor id или 0, если не действующий
 */
 native int GetSurvivorOfUserId(int userid); 
 
 /**
- * Возвращает survivorid выжившего
+ * Возвращает survivor id
  *
- * client 	- client id выжившего
- * return 	- survivorid выжившего или 0, если не действующий
+ * client 		- client id 
+ * return 		- survivor id или 0, если не действующий
 */
 native int GetClientSurvivorId(int client);
 
 /**
- * Возвращает client id выжившего
+ * Возвращает client id
  *
- * survivorid	- survivorid выжившего
- * return 	- client id выжившего или 0, если не действующий
+ * survivorid	- survivor id
+ * return 		- client id или 0, если не действующий
 */
 native int GetClientOfSurvivorId(int survivorid);
