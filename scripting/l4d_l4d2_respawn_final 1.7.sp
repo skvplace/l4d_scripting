@@ -20,7 +20,7 @@ public Plugin:myinfo =
 	name 		= "[L4D/L4D2] Respawn Final",
 	author 		= "Skv",
 	description = "The plugin allows survivors to respawn in the finale",
-	version 	= "1.6",
+	version 	= "1.7",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2829933#post2829933"
 }
 
@@ -276,6 +276,18 @@ public OnPluginStart()
 	HookConVarChange(gc_respawn_outside_time, OnConVarChanged_respawn_outside_time);
 	
 	AutoExecConfig(true, "respawn_final");
+}
+
+public OnAllPluginsLoaded()
+{
+	if (!LibraryExists("[skvtools] l4d_l4d2_gamestartcoop"))
+	{
+		SetFailState("The library [skvtools] l4d_l4d2_gamestartcoop was not found!");
+	}
+	else if (!LibraryExists("[skvtools] l4d_survivorid"))
+	{
+		SetFailState("The library [skvtools] l4d_survivorid was not found!");
+	}
 }
 
 void OnConVarChanged_rescue_min_dead_time_final(ConVar convar, const char[] oldValue, const char[] newValue)
@@ -2718,6 +2730,6 @@ int GetSurvivorClone(int survivorid)
 			return i;
 		}
 	}
-	
+
 	return 0;
 }
