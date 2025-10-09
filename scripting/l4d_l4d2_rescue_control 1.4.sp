@@ -19,7 +19,7 @@ public Plugin:myinfo =
 {
 	name 		= "[L4D/L4D2] Rescue Control",
 	author 		= "Skv",
-	description = "The plugin manage the respawn of survivors.",
+	description = "The plugin manage the respawn of survivors",
 	version 	= "1.4",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2836579#post2836579"
 }
