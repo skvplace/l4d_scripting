@@ -397,3 +397,4 @@ void PrintToServerPlugin(char [] message, any ...)
 	Format(buffer, len, "%s: %s", plugin_name, buffer);
 	PrintToServer(buffer);
 }
+
