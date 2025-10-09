@@ -18,7 +18,7 @@ public Plugin:myinfo =
 	name 		= "[skvtools] l4d_survivorid",
 	author 		= "Skv",
 	description = "Creates and manages survivorid - the survivor's identifier",
-	version 	= "1.4.1",
+	version 	= "1.5",
 	url 		= ""
 }
 
@@ -50,6 +50,14 @@ public OnPluginStart()
 	
 	HookEvent("player_bot_replace", Event_player_bot_replace, EventHookMode_Pre);
 	HookEvent("bot_player_replace", Event_bot_player_replace, EventHookMode_Pre);
+}
+
+public OnAllPluginsLoaded()
+{
+	if (!LibraryExists("[skvtools] l4d_l4d2_gamestartcoop"))
+	{
+		SetFailState("The library [skvtools] l4d_l4d2_gamestartcoop was not found!");
+	}
 }
 
 public OnMapStart()
