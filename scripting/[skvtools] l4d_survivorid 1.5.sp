@@ -52,20 +52,12 @@ public OnPluginStart()
 	HookEvent("bot_player_replace", Event_bot_player_replace, EventHookMode_Pre);
 }
 
-public OnAllPluginsLoaded()
-{
-	if (!LibraryExists("[skvtools] l4d_l4d2_gamestartcoop"))
-	{
-		SetFailState("The library [skvtools] l4d_l4d2_gamestartcoop was not found!");
-	}
-}
-
 public OnMapStart()
 {
 	ClearAllSurvivorId();
 }
 
-public OnServerEmpty()
+public OnMapEnd()
 {
 	ClearAllSurvivorId();
 }
