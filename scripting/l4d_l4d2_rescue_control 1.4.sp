@@ -20,7 +20,7 @@ public Plugin:myinfo =
 	name 		= "[L4D/L4D2] Rescue Control",
 	author 		= "Skv",
 	description = "The plugin manage the respawn of survivors.",
-	version 	= "1.3.3",
+	version 	= "1.4",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2836579#post2836579"
 }
 
@@ -238,6 +238,18 @@ public OnPluginStart()
 	SetConVarFlags(gc_rescue_door_opening_distance, GetConVarFlags(gc_rescue_door_opening_distance) & ~FCVAR_NOTIFY);
 	
 	AutoExecConfig(true, "rescue_control");
+}
+
+public OnAllPluginsLoaded()
+{
+	if (!LibraryExists("[skvtools] l4d_l4d2_gamestartcoop"))
+	{
+		SetFailState("The library [skvtools] l4d_l4d2_gamestartcoop was not found!");
+	}
+	else if (!LibraryExists("[skvtools] l4d_survivorid"))
+	{
+		SetFailState("The library [skvtools] l4d_survivorid was not found!");
+	}
 }
 
 void OnConVarChanged_rescue_min_dead_time(ConVar convar, const char[] oldValue, const char[] newValue)
@@ -2119,12 +2131,15 @@ int GetNearRoom(float distance)
 								
 						if (distance >= distance_client_i)
 						{
-							if (IsSameFloor(pos_client[2], pos_i[2]))
+							if (!IsVisible(client, i))
 							{
-								if (!distance_old || distance_client_i < distance_old)
+								if (IsSameFloor(pos_client[2], pos_i[2]))
 								{
-									distance_old = distance_client_i;
-									result = i;
+									if (!distance_old || distance_client_i < distance_old)
+									{
+										distance_old = distance_client_i;
+										result = i;
+									}
 								}
 							}
 						}
@@ -2158,13 +2173,16 @@ int GetNearRoom(float distance)
 						GetEntPropVector(i, Prop_Data, "m_vecOrigin", pos_i);
 						
 						distance_client_i = GetVectorDistance(pos_client, pos_i);
-							
+						
 						if (distance >= distance_client_i)
 						{
-							if (distance_old || distance_client_i < distance_old)
+							if (!IsVisible(client, i))
 							{
-								distance_old = distance_client_i;
-								result = i;
+								if (!distance_old || distance_client_i < distance_old)
+								{
+									distance_old = distance_client_i;
+									result = i;
+								}
 							}
 						}
 					}
@@ -2637,7 +2655,7 @@ void LureNearBot(int entity)
  */
 stock void SendBotToPos(int bot, float vPos[3])
 {
-	char sBuffer[128];
+	char sBuffer[256];
 	Format(sBuffer, sizeof(sBuffer), "CommandABot( { cmd = 1, bot = GetPlayerFromUserID(%i) pos = Vector(%f,%f,%f) } )", GetClientUserId(bot), vPos[0], vPos[1], vPos[2]);
 	SetVariantString(sBuffer);
 	AcceptEntityInput(bot, "RunScriptCode");
@@ -2650,7 +2668,7 @@ stock void SendBotToPos(int bot, float vPos[3])
  */
 stock void FreeBotOrder(int bot)
 {
-	char sBuffer[96];
+	char sBuffer[256];
 	Format (sBuffer, sizeof(sBuffer), "CommandABot( { cmd = 3, bot = GetPlayerFromUserID(%i) } )", GetClientUserId(bot));
 	SetVariantString(sBuffer);
 	AcceptEntityInput(bot, "RunScriptCode");
@@ -2785,14 +2803,13 @@ bool IsVisible(int client, int entity)
 	if (TR_DidHit(trace))
 	{
 		int index = TR_GetEntityIndex(trace);
+		CloseHandle(trace);
 		
 		if (index == entity)
 		{
-			CloseHandle(trace);
 			return true;
 		}
 		
-		CloseHandle(trace);
 		return false;
 	}
 	
