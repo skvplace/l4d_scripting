@@ -6,17 +6,8 @@
 #define _skvtools_gamestartcoop_included
 
 /**
- * Changes the current map and records the reason for the change with maphistory
- *
- * map 		- Map to change to
- * reason 	- Reason for change
- * return 	- 1 sucess, 0 failure
-*/
-native int FireChangeLevel(char [] map, char [] reason);
-
-/**
  * Срабатывает, когда начинается gameplay в режиме coop
- * stage 		- номер учередности загрузки (секунды)
+ * stage - номер учередности загрузки в секундах, макс 18
  */
 forward void OnGameplayStart(int stage);
 
@@ -31,16 +22,16 @@ forward void OnServerEmpty();
 forward void OnMapTransit();
 
 /**
- * Срабатывает, когда карта перезагружается
+ * Срабатывает, когда миссия перезагружается
  */
 forward void OnMapRestart();
+
+/**
+ * Срабатывает, когда меняется миссия
+ */
+forward void OnMissionChange();
 
 /**
  * Срабатывает, когда спасательный транспорт покидает финал
  */
 forward void OnEscapeVehicleLeaving();
-
-/**
- * Срабатывает, когда меняется миссия
- */
-forward void OnChangeLevel(char [] map);
