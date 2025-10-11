@@ -514,7 +514,7 @@ void Event_player_death(Handle:event, const String:name[], bool:dontBroadcast)
 		return;
 	}
 
-	if (gi_respawn_mode_finale && !IsFakeClient(client))
+	if (gi_respawn_mode_finale && !IsFakeClient(client) && !(gi_respawn_mode_finale == 1 && IsClientRespawned(client)))
 	{
 		PrintHintText(client, "%t", "will_save");
 	}
