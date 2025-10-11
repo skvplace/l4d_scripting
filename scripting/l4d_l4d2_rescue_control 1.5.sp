@@ -556,6 +556,11 @@ Action:CreateRescue(Handle timer, int survivorid)
 		return Plugin_Continue;
 	}
 	
+	if (NeedCloseRoomDoors(room))
+	{
+		return Plugin_Continue;
+	}
+
 	char temp[PLATFORM_MAX_PATH];
 	GetClientModel(client, temp, sizeof(temp));
 	
@@ -610,8 +615,6 @@ Action:CreateRescue(Handle timer, int survivorid)
 	DispatchKeyValueVector(entity, "angles", ang_spawn);
 		
 	DispatchSpawn(entity);
-	
-	CloseRoomDoors(room);
 	
 	int visible_prop = CreateEntityByName("prop_door_rotating");
 	if (visible_prop == -1)
@@ -701,14 +704,16 @@ Action:CreateRescue(Handle timer, int survivorid)
 	return Plugin_Continue;
 }
 
-void CloseRoomDoors(int room)
+bool NeedCloseRoomDoors(int room)
 {
 	if (!IsValidEntity(room))
 	{
-		return;
+		return false;
 	}
 	
 	char name[MAX_STRING_LENGTH];
+	
+	bool need_close;
 	
 	int door = -1;
 	while ((door = FindEntityByClassname(door, "prop_door_rotating")) != -1)
@@ -730,8 +735,16 @@ void CloseRoomDoors(int room)
 			{
 				InputTarget(name, "Close");
 			}
+			
+			// 0 - закрыта, 1 - открывается, 2 - открыта, 3 - закрывается
+			if (GetEntProp(door, Prop_Send, "m_eDoorState"))
+			{
+				need_close = true;
+			}
 		}
 	}
+	
+	return need_close;
 }
 
 Action:Rescue_Playsound_Timer(Handle timer, Handle h_data)
@@ -810,7 +823,7 @@ Action:Rescue_Playsound_Timer(Handle timer, Handle h_data)
 			Rescue_Restore(pos_spawn);
 		}
 		
-		CloseRoomDoors(new_room);
+		NeedCloseRoomDoors(new_room);
 		
 		return Plugin_Stop;
 	}
