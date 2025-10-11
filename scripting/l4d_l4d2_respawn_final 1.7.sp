@@ -276,6 +276,7 @@ public OnPluginStart()
 	HookConVarChange(gc_respawn_outside_time, OnConVarChanged_respawn_outside_time);
 	
 	AutoExecConfig(true, "respawn_final");
+	LoadTranslations("respawn_final.phrases");
 }
 
 public OnAllPluginsLoaded()
@@ -512,6 +513,12 @@ void Event_player_death(Handle:event, const String:name[], bool:dontBroadcast)
 	{
 		return;
 	}
+
+	if (gi_respawn_mode_finale && !IsFakeClient(client))
+	{
+		PrintHintText(client, "%t", "will_save");
+	}
+
 	int survivorid = GetClientSurvivorId(client);
 	if (survivorid)
 	{
