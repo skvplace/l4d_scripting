@@ -1,0 +1,13 @@
+//  = 0x01 (WHITE)
+//  = 0x02 (WHITE)
+//  = 0x03 (LIGHTGREEN)
+//  = 0x04 (YELLOW)
+//  = 0x05 (GREEN)
+
+"Phrases"
+{
+	"will_save"
+	{						  
+		"ru"		"Вас скоро спасут!"
+	}
+}
