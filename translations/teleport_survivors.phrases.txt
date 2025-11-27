@@ -1,0 +1,61 @@
+//  = 0x01 (WHITE)
+//  = 0x02 (WHITE)
+//  = 0x03 (LIGHTGREEN)
+//  = 0x04 (YELLOW)
+//  = 0x05 (GREEN)
+
+"Phrases"
+{
+	"Countdown"
+	{
+		"en"		"Lagging players will be moved via"
+	}
+	"Teleport"
+	{
+		"en"		"Teleportation"
+	}
+	"Teleport Canceled"
+	{
+		"en"		"Teleportation Canceled"
+	}
+	"Not enough survivors"
+	{
+		"#format"	"{1:d}"
+		"en"		"To teleport the stragglers, need {1} survivors"
+	}
+	"Countdown"
+	{
+		"ru"		"Отстающие игроки будут перемещены через"
+	}
+	"Teleport"
+	{
+		"ru"		"Перемещение"
+	}
+	"Teleport Canceled"
+	{
+		"ru"		"Перемещение отменено"
+	}
+	"Not enough survivors"
+	{
+		"#format"	"{1:d}"
+		"ru"		"Чтобы телепортировать отставших, нужно {1} выживших."
+	}
+	"Countdown"
+	{
+		"de"		"Diejenigen, die zurückbleiben, werden teleportiert durch"
+	}
+	"Teleport"
+	{
+		"de"		"Teleportation"
+	}
+	"Teleport Canceled"
+	{
+		"de"		"Teleportation abgebrochen"
+	}
+	"Not enough survivors"
+	{
+		"#format"	"{1:d}"
+		"de"		"Um die Nachzügler zu teleportieren, werden {1} Überlebende benötigt."
+	}
+}
+
