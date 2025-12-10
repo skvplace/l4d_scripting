@@ -20,7 +20,7 @@ public Plugin:myinfo =
 	name 		= "[L4D/L4D2] Teleport survivors",
 	author 		= "Skv",
 	description = "Teleports lagging survivors",
-	version 	= "2.7",
+	version 	= "2.7.1",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2841063#post2841063"
 }
 
@@ -350,7 +350,7 @@ void OnFullyClosed(char [] output, int safedoor, int client, float delay)
 	UnhookSingleEntityOutput(safedoor, output, OnFullyClosed);
 	
 	float pos_door[3];
-	GetEntPropVector(safedoor, Prop_Data, "m_vecOrigin", pos_door);
+	GetEntPropVector(safedoor, Prop_Data, "m_vecAbsOrigin", pos_door);
 		
 	float ang_door[3];
 	GetEntPropVector(safedoor, Prop_Data, "m_angRotation", ang_door);
@@ -1864,4 +1864,5 @@ stock void MovePos_Forward(float vec_origin[3], float vec_angles[3], float dista
 	vec_origin[0] = vec_origin[0] + direction[0] * distance;
 	vec_origin[1] = vec_origin[1] + direction[1] * distance;
 	vec_origin[2] = vec_origin[2] + direction[2] * distance;
+
 }
