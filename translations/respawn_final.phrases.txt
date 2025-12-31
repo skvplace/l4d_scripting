@@ -10,5 +10,8 @@
 	{						  
 		"en"		"They will save you soon!"
 	}
+	"will_save"
+	{						  
+		"ru"		"Вас скоро спасут!"
+	}
 }
-
