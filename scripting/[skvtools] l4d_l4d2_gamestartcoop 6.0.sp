@@ -131,9 +131,17 @@ void Event_player_disconnect(Handle:event, const String:name[], bool:dontBroadca
 		
 	for (int i = 1; i <= MAX_PLAYERS; i++)
 	{
-		if (i != client && IsClientConnected(i))
+		if (i != client && IsValidClient(i) && GetClientTeam(i) == 2 && !IsFakeClient(i))
 		{
 			return;
+		}
+	}
+		
+	for (int i = 1; i <= MAX_PLAYERS; i++)
+	{
+		if (IsClientInGame(i) && !IsFakeClient(i))
+		{
+			KickClient(i);
 		}
 	}
 	
@@ -478,4 +486,5 @@ void PrintToServerPlugin(char [] message, any ...)
 	
 	Format(buffer, len, "%s: %s", plugin_name, buffer);
 	PrintToServer(buffer);
+
 }
