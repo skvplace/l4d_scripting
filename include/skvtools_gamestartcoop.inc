@@ -5,11 +5,23 @@
 
 #define _skvtools_gamestartcoop_included
 
+define MAX_STAGE 18
+
 /**
  * Срабатывает, когда начинается gameplay в режиме coop
  * stage - номер учередности загрузки в секундах, макс 18
  */
 forward void OnGameplayStart(int stage);
+
+/**
+ * Срабатывает при событии mission_lost
+ */
+forward void OnMissionLost();
+
+/**
+ * Checks if the game is active
+*/
+native bool IsGameplayActive(); 
 
 /**
  * Срабатывает, когда сервер покидает последний игрок
