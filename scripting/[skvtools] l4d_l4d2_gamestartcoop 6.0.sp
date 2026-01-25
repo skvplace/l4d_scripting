@@ -42,12 +42,12 @@ GlobalForward 	gF_OnMissionLost;
 
 ConVar 			gc_server_console;
 
-enum 			EventType
+enum 			EventName
 {
-				PLAYER_SPAWN = 0,
-				PLAYER_TEAM,
-				MISSION_LOST,
-				PLAYER_DISCONNECT
+				player_spawn = 0,
+				player_team,
+				mission_lost,
+				player_disconnect
 };
 
 bool 			gb_eventhook[4];
@@ -108,7 +108,7 @@ public OnMapStart()
 	
 	if (!gb_server_empty)
 	{
-		EventEnable(PLAYER_DISCONNECT);
+		EventEnable(player_disconnect);
 	}
 }
 
@@ -145,7 +145,7 @@ void Event_player_disconnect(Handle:event, const String:name[], bool:dontBroadca
 		}
 	}
 	
-	EventDisable(PLAYER_DISCONNECT);
+	EventDisable(player_disconnect);
 	
 	SetServerEmpty();
 }
@@ -172,11 +172,11 @@ public OnClientPostAdminCheck(int client)
 		PrintToServerPlugin("FirstClientPutInServer");
 		
 		Delete_Timers();
-		EventEnable(PLAYER_SPAWN);
-		EventEnable(PLAYER_TEAM);
+		EventEnable(player_spawn);
+		EventEnable(player_team);
 		
 		
-		EventDisable(PLAYER_DISCONNECT);
+		EventDisable(player_disconnect);
 		gb_server_empty = false;
 	}
 }
@@ -191,7 +191,7 @@ void Event_player_spawn(Handle:event, const String:name[], bool:dontBroadcast)
 		gb_new_game = false;
 		gb_gameplay = true;
 		
-		EventDisable(PLAYER_SPAWN);
+		EventDisable(player_spawn);
 		Delete_Timers();
 		
 		gt_GameplayStart = CreateTimer(0.1, GameplayStart);
@@ -318,8 +318,8 @@ void Event_player_team(Handle:event, const String:name[], bool:dontBroadcast)
 
 void SetServerEmpty()
 {
-	EventDisable(PLAYER_TEAM);
-	EventDisable(MISSION_LOST);
+	EventDisable(player_team);
+	EventDisable(mission_lost);
 	
 	Delete_Timers();
 	
@@ -350,7 +350,7 @@ Action:GameplayStart(Handle timer)
 	
 	gt_GameplayStart_Stage = CreateTimer(1.0, GameplayStart_Stage, _, TIMER_REPEAT);
 	
-	EventEnable(MISSION_LOST);
+	EventEnable(mission_lost);
 }
 
 Action:GameplayStart_Stage(Handle timer)
@@ -383,60 +383,60 @@ void Delete_Timers()
 	}
 }
 
-void EventEnable(EventType type)
+void EventEnable(EventName name)
 {
-	if (gb_eventhook[type])
+	if (gb_eventhook[name])
 	{
 		return;
 	}
 	
-	gb_eventhook[type] = true;
+	gb_eventhook[name] = true;
 	
-	switch(type)
+	switch(name)
 	{
-		case PLAYER_SPAWN:
+		case player_spawn:
 		{
 			HookEvent("player_spawn", Event_player_spawn);
 		}
-		case PLAYER_TEAM:
+		case player_team:
 		{
 			HookEvent("player_team", Event_player_team);
 		}
-		case MISSION_LOST:
+		case mission_lost:
 		{
 			HookEvent("mission_lost", Event_mission_lost);
 		}
-		case PLAYER_DISCONNECT:
+		case player_disconnect:
 		{
 			HookEvent("player_disconnect", Event_player_disconnect);
 		}
 	}	
 }
 
-void EventDisable(EventType type)
+void EventDisable(EventName name)
 {
-	if (!gb_eventhook[type])
+	if (!gb_eventhook[name])
 	{
 		return;
 	}
 	
-	gb_eventhook[type] = false;
+	gb_eventhook[name] = false;
 	
-	switch(type)
+	switch(name)
 	{
-		case PLAYER_SPAWN:
+		case player_spawn:
 		{
 			UnhookEvent("player_spawn", Event_player_spawn);
 		}
-		case PLAYER_TEAM:
+		case player_team:
 		{
 			UnhookEvent("player_team", Event_player_team);
 		}
-		case MISSION_LOST:
+		case mission_lost:
 		{
 			UnhookEvent("mission_lost", Event_mission_lost);
 		}
-		case PLAYER_DISCONNECT:
+		case player_disconnect:
 		{
 			UnhookEvent("player_disconnect", Event_player_disconnect);
 		}
