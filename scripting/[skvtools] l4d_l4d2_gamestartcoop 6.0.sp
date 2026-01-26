@@ -83,13 +83,12 @@ public OnPluginStart()
 	gF_OnMapTransit = new GlobalForward("OnMapTransit", ET_Ignore);
 	HookEvent("map_transition", Event_map_transition, EventHookMode_Pre);
 	HookEvent("finale_win", Event_map_transition, EventHookMode_Pre);
-		
+
+	gF_OnMissionLost = new GlobalForward("OnMissionLost", ET_Ignore);
 	gF_OnMissionChange = new GlobalForward("OnMissionChange", ET_Ignore);
 	
 	gF_OnServerEmpty = new GlobalForward("OnServerEmpty", ET_Ignore);
 	gF_OnEscapeVehicleLeaving = new GlobalForward("OnEscapeVehicleLeaving", ET_Ignore);
-	
-	gF_OnMissionLost = new GlobalForward("OnMissionLost", ET_Ignore);
 	
 	gc_server_console = CreateConVar("gamestartcoop_server_console", "1", "Output messages to server console?", _, true, 0.0, true, 1.0);
 	SetConVarFlags(gc_server_console, GetConVarFlags(gc_server_console) & ~FCVAR_NOTIFY);
@@ -488,6 +487,7 @@ void PrintToServerPlugin(char [] message, any ...)
 	PrintToServer(buffer);
 
 }
+
 
 
 
