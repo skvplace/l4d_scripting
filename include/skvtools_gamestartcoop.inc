@@ -5,7 +5,7 @@
 
 #define _skvtools_gamestartcoop_included
 
-define MAX_STAGE 18
+#define MAX_STAGE 18
 
 /**
  * Срабатывает, когда начинается gameplay в режиме coop
