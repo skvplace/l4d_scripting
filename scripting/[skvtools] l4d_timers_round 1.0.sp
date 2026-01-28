@@ -90,7 +90,7 @@ int native_RTimerCreate(Handle plugin, int numParams)
 		
 	for (int i = 1; i <= MAX_TIMERS; i++)
 	{
-		if (gf_timer_firetime[i])
+		if (!gf_timer_firetime[i])
 		{
 			gh_plugin			[i] = plugin;
 			gh_func				[i] = func;
@@ -626,6 +626,7 @@ void Status()
 	LogToDebug(DEBUG_LOG, gs_logpath, "-------------------------------");
 	LogToDebug(DEBUG_LOG, gs_logpath, " ");
 }
+
 
 
 
