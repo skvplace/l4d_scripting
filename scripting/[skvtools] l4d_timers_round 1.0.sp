@@ -414,6 +414,8 @@ public OnGameplayStart(int stage)
 		InputKill(timer);
 	}
 	
+	Delete_RTimers();
+	
 	int entity = CreateEntityByName("logic_timer");
 	if (entity == -1)
 	{
@@ -428,7 +430,7 @@ public OnGameplayStart(int stage)
 		
 	DispatchSpawn(entity);
 	
-	HookSingleEntityOutput(entity, "OnRTimer", OnRTimer);
+	HookSingleEntityOutput(entity, "OnTimer", OnTimer);
 }
 
 int GetRTimer()
@@ -448,7 +450,7 @@ int GetRTimer()
 	return 0;
 }
 
-void OnRTimer(char [] output, int timer, int activator, float delay)
+void OnTimer(char [] output, int timer, int activator, float delay)
 {
 	for (int i = 1; i <= MAX_TIMERS; i++)
 	{
@@ -460,16 +462,6 @@ void OnRTimer(char [] output, int timer, int activator, float delay)
 	}
 }
 
-/*
-enum Action
-{
-	Plugin_Continue = 0,    //< Continue with the original action
-	Plugin_Changed = 1,     //< Inputs or outputs have been overridden with new values
-	Plugin_Handled = 3,     //< Handle the action at the end (don't call it)
-	Plugin_Stop = 4         //< Immediately stop the hook chain and handle the original
-};
-*/
-
 void RTimerFire(int timerid)
 {
 	LogToDebug(DEBUG_LOG, gs_logpath, "RTimerFire: timer %d", timerid);
@@ -478,6 +470,16 @@ void RTimerFire(int timerid)
 	{
 		return;
 	}
+	
+	/*
+	enum Action
+	{
+		Plugin_Continue = 0,    //< Continue with the original action
+		Plugin_Changed = 1,     //< Inputs or outputs have been overridden with new values
+		Plugin_Handled = 3,     //< Handle the action at the end (don't call it)
+		Plugin_Stop = 4         //< Immediately stop the hook chain and handle the original
+	};
+	*/
 	
 	int action;
 	
