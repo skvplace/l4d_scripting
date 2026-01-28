@@ -17,7 +17,7 @@ public Plugin:myinfo =
 }
 
 bool 			DEBUG_LOG 			= true;
-#define 		FILE_PATH			"data/timers_%s.log"
+#define 		FILE_PATH			"data/timers_round_%s.log"
 char 			gs_logpath			[PLATFORM_MAX_PATH];
 
 #define 		NAME_TIMER 			"round_timer"
@@ -620,3 +620,4 @@ void Status()
 	LogToDebug(DEBUG_LOG, gs_logpath, "-------------------------------");
 	LogToDebug(DEBUG_LOG, gs_logpath, " ");
 }
+
