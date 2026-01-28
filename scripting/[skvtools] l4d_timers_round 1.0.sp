@@ -499,6 +499,12 @@ void RTimerFire(int timerid)
 		
 		gf_timer_firetime	[timerid] = 0.0;
 		gf_timer_interval	[timerid] = 0.0;
+
+		if (IsValidHandle(ga_timer_value[i]))
+		{
+			CloseHandle(ga_timer_value[i]);
+		}
+
 		ga_timer_value		[timerid] = 0;
 		gi_timer_flags		[timerid] = 0;
 	}
@@ -620,4 +626,5 @@ void Status()
 	LogToDebug(DEBUG_LOG, gs_logpath, "-------------------------------");
 	LogToDebug(DEBUG_LOG, gs_logpath, " ");
 }
+
 
