@@ -13,7 +13,7 @@ Return:
 		<KeyWord name="GetSurvivorOfUserId" func="yes">
             <Overload retVal="native int" descr="
 Params:
-    userid                  survivor id.
+    userid                  user id.
 Notes:
     Returns client index.
 Return:
@@ -46,4 +46,5 @@ Return:
                 <Param name="int survivorid"/>
             </Overload>
         </KeyWord>
+
        
