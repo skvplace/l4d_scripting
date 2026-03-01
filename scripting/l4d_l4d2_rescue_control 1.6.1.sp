@@ -249,10 +249,6 @@ public void OnAllPluginsLoaded()
 	{
 		SetFailState("The library [skvtools] l4d_gamestart was not found!");
 	}
-	else if (!LibraryExists("[skvtools] l4d_survivorid"))
-	{
-		SetFailState("The library [skvtools] l4d_survivorid was not found!");
-	}
 }
 
 void OnConVarChanged_rescue_min_dead_time(ConVar convar, const char[] oldValue, const char[] newValue)
