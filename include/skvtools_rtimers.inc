@@ -200,7 +200,7 @@ native any RTimerGetValue(Handle timer);
 */
 stock bool RTimerSetValue(Handle timer, any value)
 {
-	Handle data = RTimerGetValue(timer);
+	Handle data = view_as<Handle>(RTimerGetValue(timer));
 	if (!IsValidHandle(data))
 	{
 		CloseHandle(data);
@@ -287,4 +287,5 @@ void RTimerClose(Handle timer, any data, int flags = 0)
 		CloseHandle(data);
 	}
 }
+
 
