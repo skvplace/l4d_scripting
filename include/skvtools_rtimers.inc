@@ -84,7 +84,7 @@ stock Handle RTimerCreate(float interval, RTimer func, any value = 0, int flags 
 }
 
 /**
- * Creates a round timer.
+ * Creates a round timer associated with a new datapack.
  *
  * @param interval      Timer interval in seconds.
  * @param func          Function to execute once the given interval has elapsed.
@@ -131,7 +131,7 @@ stock bool RTimerKill(Handle timer, bool autoClose = false)
 {
 	if (autoClose)
 	{
-		Handle value = RTimerGetValue(timer);
+		Handle value = view_as<Handle>(RTimerGetValue(timer));
 		if (IsValidHandle(value))
 		{
 			CloseHandle(value);
@@ -287,5 +287,6 @@ void RTimerClose(Handle timer, any data, int flags = 0)
 		CloseHandle(data);
 	}
 }
+
 
 
