@@ -153,10 +153,6 @@ public void OnAllPluginsLoaded()
 	{
 		SetFailState("The library [skvtools] l4d_gamestart was not found!");
 	}
-	else if (!LibraryExists("[skvtools] l4d_survivorid"))
-	{
-		SetFailState("The library [skvtools] l4d_survivorid was not found!");
-	}
 }
 
 public void OnMapInit(const char[] mapName)
@@ -2649,4 +2645,5 @@ stock bool IsPlayerTank(int client)
 	}
 		
 	return false;
+
 }
