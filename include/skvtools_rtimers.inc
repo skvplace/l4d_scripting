@@ -227,8 +227,7 @@ native bool RTimerAddInterval(Handle timer, float seconds);
 native bool RTimerSubInterval(Handle timer, float seconds);
 
 /**
- * Shift the timer's expiration,
- * if the received interval is less than 0, the timer fires.
+ * Shift the timer's expiration.
  *
  * @param timer         Handle to the timer object.
  * @param seconds       Number of seconds.
@@ -288,3 +287,4 @@ void RTimerClose(Handle timer, any data, int flags = 0)
 		CloseHandle(data);
 	}
 }
+
