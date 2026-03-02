@@ -107,8 +107,6 @@ any native_CreateRTimer(Handle plugin, int numParams)
 		}
 	}
 	
-	float gametime = GetGameTime();
-	
 	int i;
 	
 	for (i = 1; i <= MAX_RTIMERS; i++)
@@ -118,7 +116,7 @@ any native_CreateRTimer(Handle plugin, int numParams)
 			gh_plugin			[i] = plugin;
 			gh_func				[i] = GetNativeFunction(2);
 			
-			gf_timer_firetime	[i] = gametime + interval;
+			gf_timer_firetime	[i] = GetGameTime() + interval;
 			gf_timer_interval	[i] = interval;
 			
 			ga_timer_value		[i] = GetNativeCell(3);
@@ -889,4 +887,5 @@ int GetUserSlot(int userid)
 	}
 
 	return 0;
+
 }
