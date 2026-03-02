@@ -27,7 +27,7 @@ public Plugin myinfo =
 #define 	TIMER_FLAG_NO_ROUNDCHANGE   	(1<<2)	/* < Timer will not carry over round */
 
 #define 	NAME_RTIMER 					"skvtools_rtimer"
-#define 	MIN_INTERVAL 					0.05 	// minimum timer operation interval >= 0.01
+#define 	MIN_INTERVAL 					0.033	// minimum timer operation interval >= 0.01
 #define 	MAX_RTIMERS   					512 	// sets the maximum number of timers that can run simultaneously
 
 Handle 		gh_timer						[MAX_RTIMERS + 1];
@@ -889,6 +889,7 @@ int GetUserSlot(int userid)
 	return 0;
 
 }
+
 
 
 
