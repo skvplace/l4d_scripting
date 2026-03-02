@@ -41,10 +41,9 @@ int 		gi_timer_flags					[MAX_RTIMERS + 1];
 int 		gi_timer_pause					[MAX_RTIMERS + 1];
 
 #define 	MAX_PLAYERS 					18
+int 		gi_users						[MAX_PLAYERS + 1];
 
 bool 		gb_server_empty;
-
-int 		gi_users						[MAX_PLAYERS + 1];
 
 public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max)
 {
@@ -889,3 +888,4 @@ int GetUserSlot(int userid)
 	return 0;
 
 }
+
