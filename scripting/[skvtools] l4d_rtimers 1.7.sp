@@ -597,7 +597,7 @@ void RTimerSpawn()
 	DispatchKeyValue(entity, "StartDisabled", "0");
 	
 	DispatchKeyValue(entity, "UseRandomTime", "0");
-	DispatchKeyValueFloat(entity, "RefireTime", MIN_INTERVAL); // 0.1
+	DispatchKeyValueFloat(entity, "RefireTime", MIN_INTERVAL);
 		
 	DispatchSpawn(entity);
 	
@@ -889,5 +889,6 @@ int GetUserSlot(int userid)
 	return 0;
 
 }
+
 
 
