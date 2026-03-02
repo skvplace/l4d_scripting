@@ -389,10 +389,6 @@ any native_RTimerSetInterval(Handle plugin, int numParams)
 	}
 		
 	float 	interval_new 	= GetNativeCell(2);
-	if (interval_new <= 0.0)
-	{
-		return false;
-	}
 	
 	if (interval_new < MIN_INTERVAL)
 	{
@@ -438,6 +434,11 @@ any native_RTimerValueSet(Handle plugin, int numParams)
 	{
 		if (gh_timer[i] == timer)
 		{
+			if (IsValidHandle(ga_timer_value[i]))
+			{
+				CloseHandle(ga_timer_value[i]);
+			}
+			
 			ga_timer_value[i] = value;
 							
 			return true;
@@ -888,4 +889,5 @@ int GetUserSlot(int userid)
 	return 0;
 
 }
+
 
