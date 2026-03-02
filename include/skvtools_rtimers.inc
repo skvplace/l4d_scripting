@@ -80,6 +80,11 @@ stock Handle RTimerCreate(float interval, RTimer func, any value = 0, int flags 
 	
 	CloseHandle(timer);
 	
+	if ((flags & TIMER_DATA_HNDL_CLOSE) && IsValidHandle(value))
+	{
+		CloseHandle(value);
+	}
+
 	return INVALID_HANDLE;
 }
 
@@ -287,6 +292,7 @@ void RTimerClose(Handle timer, any data, int flags = 0)
 		CloseHandle(data);
 	}
 }
+
 
 
 
