@@ -292,7 +292,3 @@ void RTimerClose(Handle timer, any data, int flags = 0)
 		CloseHandle(data);
 	}
 }
-
-
-
-
