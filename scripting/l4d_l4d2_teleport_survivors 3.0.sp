@@ -1,7 +1,7 @@
 /**
  * ========================================================================
  * Plugin [L4D/L4D2] Teleport survivors
- * Teleports late survivors.
+ * Teleportation of belated survivors.
  * ========================================================================
  *
  * This program is free software; you can redistribute it and/or modify it.
@@ -23,7 +23,7 @@ public Plugin myinfo =
 {
 	name 		= "[L4D] Teleport survivors",
 	author 		= "Skv",
-	description = "Teleports late survivors to elevators, shelters, and rescue vehicles",
+	description = "Teleports belated survivors to elevators, shelters, and rescue vehicles",
 	version 	= "3.0",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2841063#post2841063"
 }
@@ -2660,4 +2660,5 @@ stock bool IsPlayerTank(int client)
 	}
 		
 	return false;
+
 }
