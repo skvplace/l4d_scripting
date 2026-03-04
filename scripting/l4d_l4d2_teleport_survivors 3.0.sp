@@ -1802,7 +1802,7 @@ bool IsAnySurvivorNearEntity(int bot)
 			GetClientEyePosition(i, pos_survivor);
 				
 			if (GetVectorDistance(pos_bot, pos_survivor) <= distance &&
-				IsSameFloor(pos_bot[2], pos_survivor[2], 200.0))
+				IsSameFloor(pos_bot[2], pos_survivor[2], 200.0)) cu
 			{
 				return true;
 			}
@@ -2581,7 +2581,7 @@ stock void InputKill(int entity, float time = 0.0)
 	
 	if (time == 0.0)
 	{
-		if (HasEntProp(entity, Prop_Data, "m_iParent"))
+		if (HasEntProp(entity, Prop_Data, "m_pParent"))
 		{
 			if (IsEntityValid(GetEntPropEnt(entity, Prop_Data, "m_pParent")))
 			{
@@ -2599,7 +2599,7 @@ stock void InputKill(int entity, float time = 0.0)
 	{
 		static char temp[MAX_STRING_LENGTH];
 		
-		if (HasEntProp(entity, Prop_Data, "m_iParent"))
+		if (HasEntProp(entity, Prop_Data, "m_pParent"))
 		{
 			if (IsEntityValid(GetEntPropEnt(entity, Prop_Data, "m_pParent")))
 			{
@@ -2662,3 +2662,4 @@ stock bool IsPlayerTank(int client)
 	return false;
 
 }
+
