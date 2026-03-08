@@ -8,7 +8,7 @@
 {
 	"Countdown"
 	{
-		"en"		"Lagging players will be moved via"
+		"en"		"Teleportation of stragglers after"
 	}
 	"Teleport"
 	{
@@ -25,7 +25,7 @@
 	}
 	"Countdown"
 	{
-		"ru"		"Отстающие игроки будут перемещены через"
+		"ru"		"Телепортация отставших игроков через"
 	}
 	"Teleport"
 	{
@@ -42,7 +42,7 @@
 	}
 	"Countdown"
 	{
-		"de"		"Diejenigen, die zurückbleiben, werden teleportiert durch"
+		"de"		"Teleportation der Nachzügler nach"
 	}
 	"Teleport"
 	{
@@ -58,4 +58,5 @@
 		"de"		"Um die Nachzügler zu teleportieren, werden {1} Überlebende benötigt."
 	}
 }
+
 
