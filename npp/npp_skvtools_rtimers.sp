@@ -201,3 +201,4 @@ Notes:
                 <Param name="float seconds"/>
             </Overload>
         </KeyWord>
+        <KeyWord name="TIMER_FLAG_NO_ROUNDCHANGE"/>
