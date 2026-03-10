@@ -973,6 +973,11 @@ public void OnMapEnd()
 	Delete_Timers();
 }
 
+public void OnMapTransit()
+{
+	Delete_Timers();
+}
+
 public void OnMapRestart()
 {
 	Delete_Timers();
@@ -2403,4 +2408,5 @@ stock bool IsPlayerTank(int client)
 	}
 		
 	return false;
+
 }
