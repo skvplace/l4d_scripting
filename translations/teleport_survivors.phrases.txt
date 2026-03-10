@@ -1,0 +1,89 @@
+//  = 0x01 (WHITE)
+//  = 0x02 (WHITE)
+//  = 0x03 (LIGHTGREEN)
+//  = 0x04 (YELLOW)
+//  = 0x05 (GREEN)
+
+"Phrases"
+{
+	"Countdown"
+	{
+		"en"		"Teleportation of stragglers after"
+	}
+	"Teleport"
+	{
+		"en"		"Teleportation"
+	}
+	"Teleport Canceled"
+	{
+		"en"		"Teleportation Canceled"
+	}
+	"Not enough survivors"
+	{
+		"#format"	"{1:d}"
+		"en"		"To teleport the stragglers, need {1} survivors"
+	}
+	"Infected"
+	{
+		"#format"	"{1:s}"
+		"en"		"{1} is interfering with teleportation"
+	}
+	"Safedoor"
+	{
+		"en"		"A blocked door is preventing teleportation"
+	}
+	"Countdown"
+	{
+		"ru"		"Телепортация отставших игроков через"
+	}
+	"Teleport"
+	{
+		"ru"		"Перемещение"
+	}
+	"Teleport Canceled"
+	{
+		"ru"		"Перемещение отменено"
+	}
+	"Not enough survivors"
+	{
+		"#format"	"{1:d}"
+		"ru"		"Чтобы телепортировать отставших, нужно {1} выживших."
+	}
+	"Infected"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Телепортации мешает {1}"
+	}
+	"Safedoor"
+	{
+		"ru"		"Телепортации мешает заблокированная дверь"
+	}
+	"Countdown"
+	{
+		"de"		"Teleportation der Nachzügler nach"
+	}
+	"Teleport"
+	{
+		"de"		"Teleportation"
+	}
+	"Teleport Canceled"
+	{
+		"de"		"Teleportation abgebrochen"
+	}
+	"Not enough survivors"
+	{
+		"#format"	"{1:d}"
+		"de"		"Um die Nachzügler zu teleportieren, werden {1} Überlebende benötigt."
+	}
+	"Infected"
+	{
+		"#format"	"{1:s}"
+		"de"		"{1} stört die Teleportation"
+	}
+	"Safedoor"
+	{
+		"de"		"Eine blockierte Tür verhindert die Teleportation"
+	}
+}
+
+
