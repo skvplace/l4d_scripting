@@ -21,7 +21,7 @@ public Plugin myinfo =
 	author 		= "Skv",
 	description = "Creates and manages timers that are active only during round",
 	version 	= "1.7.2",
-	url 		= ""
+	url 		= "https://forums.alliedmods.net/showthread.php?t=352314"
 }
 
 #define 	TIMER_FLAG_NO_ROUNDCHANGE   	(1<<2)	/* < Timer will not carry over round */
@@ -910,4 +910,5 @@ int GetUserSlot(int userid)
 	}
 
 	return 0;
+
 }
