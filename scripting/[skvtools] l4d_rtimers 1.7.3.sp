@@ -706,13 +706,15 @@ void OnTimer(char [] output, int timer, int activator, float delay)
 		return;
 	}
 	
+	float gametime = GetGameTime();
+	
 	for (int i = 1; i <= MAX_RTIMERS; i++)
 	{
 		if (gh_timer[i])
 		{
 			if (IsValidHandle(gh_timer[i]))
 			{
-				if (gf_timer_firetime[i] <= GetGameTime())
+				if (gf_timer_firetime[i] <= gametime)
 				{
 					RTimerFire(i);
 				}
