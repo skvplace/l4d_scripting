@@ -952,14 +952,6 @@ void Delete_Timers()
 		delete gk_rooms;
 	}
 	
-	for (int i = 1; i <= MAX_SURVIVORID; i++)
-	{
-		RTimerKill(gt_CreateRescue[i]);
-		RTimerKill(gt_Rescue_Playsound_Timer[i]);
-	}
-	
-	RTimerKill(gt_SearchDeadSurvivor);
-	
 	gb_finale_start = false;
 		
 	char classname[MAX_STRING_LENGTH];
