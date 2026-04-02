@@ -509,15 +509,17 @@ void RTimerFire(int i)
 	{
 		action = 4;
 	}
-	
-	if (GetGameTime() - gf_timer_create[i] < MIN_INTERVAL)
+
+	float gametime = GetGameTime();
+
+	if (gametime - gf_timer_create[i] < MIN_INTERVAL)
 	{
 		return;
 	}
 	
 	if ((gi_timer_flags[i] & TIMER_REPEAT) && action != 4 && gf_timer_interval[i] > 0.0)
 	{
-		gf_timer_firetime[i] = GetGameTime() + gf_timer_interval[i];
+		gf_timer_firetime[i] = gametime + gf_timer_interval[i];
 			
 		return;
 	}
