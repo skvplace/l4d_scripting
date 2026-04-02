@@ -455,8 +455,6 @@ void OnTimer(char [] output, int timer, int activator, float delay)
 		return;
 	}
 	
-	int timers_count;
-	
 	float gametime = GetGameTime();
 	
 	for (int i = 1; i <= gi_timerid_current_count; i ++)
@@ -475,8 +473,6 @@ void OnTimer(char [] output, int timer, int activator, float delay)
 					{
 						gf_timer_firetime[i] += MIN_INTERVAL;
 					}
-							
-					timers_count ++;
 				}
 			}
 			else
