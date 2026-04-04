@@ -7,7 +7,7 @@
 
 #include <version>
 
-// tx to @Localia and Dragokas
+// tx to @Localia and @Dragokas
 #if SOURCEMOD_V_MAJOR > 1 || \
     (SOURCEMOD_V_MAJOR == 1 && SOURCEMOD_V_MINOR > 13) || \
     (SOURCEMOD_V_MAJOR == 1 && SOURCEMOD_V_MINOR == 13 && SOURCEMOD_V_REV >= 7304)
