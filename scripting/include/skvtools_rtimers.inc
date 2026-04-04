@@ -91,7 +91,7 @@ stock Handle RTimerCreate(float interval, RTimer func, any value = 0, int flags 
 	
 	delete timer;
 	
-	if (flags & TIMER_DATA_HNDL_CLOSE) // && IsValidHandle(value)
+	if (flags & TIMER_DATA_HNDL_CLOSE)
 	{
 		delete view_as<Handle>(value);
 	}
@@ -320,14 +320,14 @@ native bool RTimerValueSet(Handle timer, any value);
 */
 void RTimerClose(Handle timer, any data, int flags = 0)
 {
-	if (timer) // IsValidHandle(timer)
+	if (timer)
 	{
 		delete timer;
 	}
 	
 	if (flags & TIMER_DATA_HNDL_CLOSE)
 	{
-		if (data) // IsValidHandle(data)
+		if (data)
 		{
 			delete view_as<Handle>(data);
 		}
