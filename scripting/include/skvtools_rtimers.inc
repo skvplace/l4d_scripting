@@ -124,11 +124,7 @@ stock Handle RTimerDataCreate(float interval, RTimer func, Handle &datapack, int
 		return timer;
 	}
 	
-	if (flags & TIMER_DATA_HNDL_CLOSE)
-	{
-		delete datapack;
-	}
-	
+	delete datapack;
 	delete timer;
 			
 	return null;
