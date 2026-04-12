@@ -26,6 +26,9 @@ public Plugin myinfo =
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2842880#post2842880"
 }
 
+bool 		gb_error_state_create;
+bool 		gb_error_state_delete;
+
 #define 	NAME_RTIMER 					"skvtools_rtimer"
 #define 	MIN_INTERVAL 					0.033 	// minimum timer operation interval >= 0.01
 #define 	MAX_RTIMERS   					512 	// sets the maximum number of timers that can run simultaneously
@@ -48,7 +51,7 @@ bool 		gb_server_empty;
 
 int 		gi_logic_timer;
 
-int 		gi_timerid_current_count;
+int 		gi_timerid_count;
 
 public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max)
 {
@@ -61,8 +64,8 @@ public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max
 	CreateNative("CreateRTimer",			native_CreateRTimer);
 	
 	CreateNative("RTimerIsValid",			native_RTimerIsValid);
-	
-	CreateNative("RTimerTrigger", 			native_RTimerTrigger);
+		
+	CreateNative("TriggerRTimer", 			native_TriggerRTimer);
 	CreateNative("RTimerPause", 			native_RTimerPause);
 	CreateNative("RTimerRemove", 			native_RTimerRemove);
 	
@@ -109,7 +112,7 @@ any native_CreateRTimer(Handle plugin, int numParams)
 	
 	if (!IsRtimerSpawn())
 	{
-		if (interval < 0.04 || (gametime < 1.21 && gametime + interval <= 1.21 + MIN_INTERVAL)) // 1.21 - время спавна logic_timer
+		if (interval < 0.04 || (gametime < 1.21 && gametime + interval < 1.21 + MIN_INTERVAL))
 		{
 			ThrowNativeError(429, "\"Attempt to create a timer outside of a round with interval %f!\"", GetNativeCell(1));
 			
@@ -117,21 +120,12 @@ any native_CreateRTimer(Handle plugin, int numParams)
 		}
 	}
 	
-	if (gi_timerid_current_count < 1)
+	if (gi_timerid_count < 1)
 	{
-		gi_timerid_current_count = 1;
+		gi_timerid_count = 1;
 	}
-	else if (gi_timerid_current_count > MAX_RTIMERS)
-	{
-		gi_timerid_current_count = MAX_RTIMERS;
 		
-		ServerCommand("sm_dump_handles addons/sourcemod/logs/error_creatertimer.txt");
-		LogError("\"native_CreateRTimer: The array size is not sufficient, MAX_RTIMERS must be at least %d\"", gi_timerid_current_count);
-		
-		return false;
-	}
-	
-	for (int i = 1; i <= gi_timerid_current_count; i++)
+	for (int i = 1; i <= gi_timerid_count; i++)
 	{
 		if (gh_timer[i] == null)
 		{
@@ -149,16 +143,31 @@ any native_CreateRTimer(Handle plugin, int numParams)
 			gh_func_close		[i] = GetNativeFunction(5);
 			gh_timer			[i] = GetNativeCell(6);
 			
-			if (i == gi_timerid_current_count)
+			if (i == gi_timerid_count)
 			{
-				gi_timerid_current_count ++;
+				gi_timerid_count ++;
+				
+				if (gi_timerid_count > MAX_RTIMERS)
+				{
+					gi_timerid_count = MAX_RTIMERS;
+					
+					if (!gb_error_state_create)
+					{
+						ServerCommand("sm_dump_handles addons/sourcemod/logs/error_creatertimer.txt");
+						LogError("\"native_CreateRTimer: The array size is not sufficient, MAX_RTIMERS must be at least %d\"", gi_timerid_count);
+						
+						gb_error_state_create = true;
+					}
+					
+					return false;
+				}
 			}
-			
+								
 			return true;
 		}
 	}
 	
-	LogError("\"native_CreateRTimer: The array size is to small no free slots! gi_timerid_current_count %d\"", gi_timerid_current_count);
+	LogError("\"native_CreateRTimer: The array size is to small no free slots! gi_timerid_count %d\"", gi_timerid_count);
 	return false;
 }
 
@@ -304,7 +313,7 @@ any native_RTimerValueSet(Handle plugin, int numParams)
 	return true;
 }
 
-any native_RTimerTrigger(Handle plugin, int numParams)
+any native_TriggerRTimer(Handle plugin, int numParams)
 {
 	int i = RTimerGetId(GetNativeCell(1));
 	if (!i)
@@ -376,7 +385,7 @@ int RTimerGetId(Handle timer)
 		return 0;
 	}
 	
-	for (int i = 1; i <= gi_timerid_current_count; i++)
+	for (int i = 1; i <= gi_timerid_count; i++)
 	{
 		if (gh_timer[i] == timer)
 		{
@@ -439,11 +448,12 @@ void OnKilled(char [] output, int timer, int activator, float delay)
 	{
 		return;
 	}
-	
+		
 	for (int i = 1; i <= MAX_PLAYERS; i++)
 	{
 		if (IsClientInGame(i) && !IsFakeClient(i))
 		{
+			
 			RequestFrame(RTimerSpawn);
 			return;
 		}
@@ -477,7 +487,7 @@ void OnTimer(char [] output, int timer, int activator, float delay)
 	
 	float gametime = GetGameTime();
 	
-	for (int i = 1; i <= gi_timerid_current_count; i ++)
+	for (int i = 1; i <= gi_timerid_count; i ++)
 	{
 		if (gh_timer[i] != null)
 		{
@@ -493,7 +503,6 @@ void OnTimer(char [] output, int timer, int activator, float delay)
 					{
 						gf_timer_firetime[i] += MIN_INTERVAL;
 					}
-							
 				}
 			}
 			else
@@ -510,16 +519,6 @@ void RTimerFire(int i)
 	{
 		return;
 	}
-	
-	/*
-	enum Action
-	{
-		Plugin_Continue = 0,    //< Continue with the original action
-		Plugin_Changed = 1,     //< Inputs or outputs have been overridden with new values
-		Plugin_Handled = 3,     //< Handle the action at the end (don't call it)
-		Plugin_Stop = 4         //< Immediately stop the hook chain and handle the original
-	};
-	*/
 	
 	int action;
 	
@@ -556,7 +555,7 @@ void RTimerFire(int i)
 
 void RTimerDelete(int i)
 {
-	if (IsValidPlugin(gh_plugin[i]) && gh_func_close[i] && IsValidHandle(gh_timer[i]))
+	if (IsValidPlugin(gh_plugin[i]) && gh_func_close[i] && gh_timer[i] != null)
 	{
 		Call_StartFunction(gh_plugin[i], gh_func_close[i]);
 		
@@ -626,7 +625,7 @@ void Transfer_RTimers()
 	
 	float gametime = GetGameTime();
 	
-	for (int i = 1; i <= gi_timerid_current_count; i ++)
+	for (int i = 1; i <= gi_timerid_count; i ++)
 	{
 		if (gh_timer[i] != null && gf_timer_firetime[i] > gametime)
 		{
@@ -634,7 +633,6 @@ void Transfer_RTimers()
 							
 			if (gi_timer_flags[i] & TIMER_REPEAT)
 			{
-				
 			}
 			else
 			{
@@ -646,7 +644,7 @@ void Transfer_RTimers()
 
 void Delete_RTimers(int flags)
 {
-	for (int i = 1; i <= gi_timerid_current_count; i ++)
+	for (int i = 1; i <= gi_timerid_count; i ++)
 	{
 		if (!flags)
 		{
@@ -660,8 +658,11 @@ void Delete_RTimers(int flags)
 	
 	if (!flags)
 	{
-		gi_timerid_current_count = 0;
-				
+		gi_timerid_count = 0;
+		
+		gb_error_state_create = false;
+		gb_error_state_delete = false;
+		
 		for (int i = 1; i <= MAX_RTIMERS; i ++)
 		{
 			RTimerClearId(i);
@@ -673,20 +674,21 @@ void Delete_RTimers(int flags)
 	int timerid[MAX_RTIMERS + 1];
 	int size;
 	
-	for (int i = 1; i <= gi_timerid_current_count; i ++)
+	for (int i = 1; i <= gi_timerid_count; i ++)
 	{
 		if (gh_timer[i] != null)
 		{
 			size ++;
 			timerid[size] = i;
+			
 		}
 	}
 	
-	gi_timerid_current_count = size;
+	gi_timerid_count = size;
 	
 	int ref;
 	
-	for (int i = 1; i <= gi_timerid_current_count; i ++)
+	for (int i = 1; i <= gi_timerid_count; i ++)
 	{
 		ref = timerid[i];
 		
@@ -705,12 +707,25 @@ void Delete_RTimers(int flags)
 			ga_timer_value		[i] = ga_timer_value	[ref];
 			gi_timer_flags		[i] = gi_timer_flags	[ref];
 			gi_timer_pause		[i] = gi_timer_pause	[ref];
-			
+						
 			RTimerClearId(ref);
 		}
 	}
 	
-	gi_timerid_current_count ++;
+	gi_timerid_count ++;
+	
+	if (gi_timerid_count > MAX_RTIMERS)
+	{
+		gi_timerid_count = MAX_RTIMERS;
+			
+		if (!gb_error_state_delete)
+		{
+			ServerCommand("sm_dump_handles addons/sourcemod/logs/error_deletertimer.txt");
+			LogError("\"Delete_RTimers: The array size is not sufficient, MAX_RTIMERS must be at least %d\"", gi_timerid_count);
+						
+			gb_error_state_delete = true;
+		}
+	}
 }
 
 void RTimerClearId(int i)
@@ -728,6 +743,7 @@ void RTimerClearId(int i)
 	ga_timer_value		[i] = 0;
 	gi_timer_flags		[i] = 0;
 	gi_timer_pause		[i] = 0;
+	
 }
 
 public void OnClientPostAdminCheck(int client)
@@ -773,6 +789,7 @@ void Event_player_disconnect(Handle event, const char [] name, bool dontBroadcas
 	}
 	
 	gb_server_empty = true;
+	
 	
 	Delete_RTimers(0);
 }
