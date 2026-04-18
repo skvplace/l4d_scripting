@@ -138,11 +138,20 @@ stock Handle RTimerDataCreate(float interval, RTimer func, Handle &datapack, int
 native bool RTimerIsValid(Handle timer);
 
 /**
- * Manually starts the timer to call its function.
+ * Starts the timer manually to call the corresponding function 
+ * and sets it to NULL if the TIMER_REPEAT flag is missing.
  *
  * @param timer         Handle to the timer object.
 */
-native bool RTimerTrigger(Handle timer);
+stock bool RTimerTrigger(Handle &timer)
+{
+	if (!(RTimerGetFlags(timer) & TIMER_REPEAT))
+	{
+		timer = null;
+	}
+	
+	return TriggerRTimer(timer);
+}
 
 /**
  * Removes the timer.
@@ -288,6 +297,13 @@ native bool RTimerShift(Handle timer, float seconds);
  * @error               Attempt to create a timer outside of a round.
 */
 native bool CreateRTimer(float interval, RTimer func, any value = 0, int flags = 0, Function func_close, Handle timer);
+
+/**
+ * Manually starts the timer to call its function.
+ *
+ * @param timer         Handle to the timer object.
+*/
+native bool TriggerRTimer(Handle timer);
 
 /**
  * Removes the timer.
