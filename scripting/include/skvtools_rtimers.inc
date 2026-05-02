@@ -16,7 +16,7 @@
 
 #endif 
 
-#define RTIMERS_VERSION 				"1.8"
+#define RTIMERS_VERSION 				"1.8.1"
 #define TIMER_FLAG_NO_ROUNDCHANGE   	(1<<2)	/* < Timer will not carry over round */
 
 /**
