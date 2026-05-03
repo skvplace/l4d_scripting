@@ -16,6 +16,13 @@ Notes:
 ">
             </Overload>
         </KeyWord>
+        <KeyWord name="IsServerEmpty" func="yes">
+            <Overload retVal="native bool" descr="
+Notes:
+    Checks if the server is empty.
+">
+            </Overload>
+        </KeyWord>
         <KeyWord name="OnMissionLost" func="yes">
             <Overload retVal="forward void" descr="
 Notes:
