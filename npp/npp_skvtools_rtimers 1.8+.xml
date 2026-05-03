@@ -144,6 +144,18 @@ Notes:
                 <Param name="Handle timer"/>
             </Overload>
         </KeyWord>
+        <KeyWord name="RTimerSetFlags" func="yes">
+            <Overload retVal="native int" descr="
+Params:
+    timer                   Handle to the timer object.
+	value                   Flags.
+Notes:
+    Returns the timer flags, or -1 if unsuccessful
+">
+                <Param name="Handle timer"/>
+				<Param name="int value"/>
+            </Overload>
+        </KeyWord>
         <KeyWord name="RTimerGetValue" func="yes">
             <Overload retVal="native any" descr="
 Params:
