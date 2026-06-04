@@ -332,7 +332,7 @@ native bool RTimerValueSet(Handle timer, any value);
 */
 void RTimerClose(Handle timer, any data, int flags = 0)
 {
-	if (timer)
+	if (timer != null)
 	{
 		delete timer;
 	}
