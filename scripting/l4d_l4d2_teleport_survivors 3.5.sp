@@ -24,7 +24,7 @@ public Plugin myinfo =
 	name 		= "[L4D] Teleport survivors",
 	author 		= "Skv",
 	description = "Teleports belated survivors to elevators, shelters, and rescue vehicles",
-	version 	= "3.4.1",
+	version 	= "3.5",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2841063#post2841063"
 }
 
@@ -688,7 +688,7 @@ void DoorwayTrigger_Spawn(int safedoor)
 	DispatchKeyValue(entity, "spawnflags", "1");
 	DispatchKeyValue(entity, "allowincap", "0");
 	DispatchKeyValue(entity, "entireteam", "2");
-	DispatchKeyValue(entity, "wait", "0.2");
+	DispatchKeyValue(entity, "wait", "0.1");
 		
 	DispatchSpawn(entity);
 	ActivateEntity(entity);
@@ -726,7 +726,7 @@ void OnStartTouch_doorway(const char[] output, int trigger, int client, float de
 
 bool IsVisible(int client, int entity)
 {
-	if (!IsValidClientTeam2Alive(client))
+	if (!IsValidClientTeleport(client))
 	{
 		return false;
 	}
@@ -745,14 +745,14 @@ bool IsVisible(int client, int entity)
 	char classname[MAX_CLASSNAME_LENGTH];
 	GetEntityClassname(entity, classname, sizeof(classname));
 	
-	float ang_client[3];
+	/*float ang_client[3];
 	GetClientEyeAngles(client, ang_client);
 	
 	ang_client[0] = 0.0;
 	ang_client[2] = 0.0;
 	
 	MovePos_Forward(pos_end, ang_client, 5.0); // 10.0
-	
+	*/
 	Handle trace = TR_TraceRayFilterEx(pos_start, pos_end, MASK_SOLID, RayType_EndPoint, TraceFilter_Visible);
 	if (TR_DidHit(trace))
 	{
