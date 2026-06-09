@@ -1000,6 +1000,10 @@ void Delete_Timers()
 		gi_help_owner	[i] = 0;
 		gi_help_target	[i] = 0;
 	}
+
+	gv_pos_opener[0] = 0.0;
+	gv_pos_opener[1] = 0.0;
+	gv_pos_opener[2] = 0.0;
 }
 
 void Search_ButtonTriggers(int button)
