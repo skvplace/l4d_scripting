@@ -107,7 +107,7 @@ public void OnPluginStart()
 {
 	gc_teleport_countdown_elevator 		= CreateConVar("ts_teleport_countdown_elevator", "5", "Countdown to teleportation to the elevators. 0 - is disabled", _, true, 0.0, true, 240.0);
 	gc_teleport_countdown_escape 		= CreateConVar("ts_teleport_countdown_escape", "15", "Countdown to teleportation to escape. 0 - is disabled", _, true, 0.0, true, 240.0);
-	gc_teleport_countdown_escape_mode 	= CreateConVar("ts_teleport_countdown_escape_mode", "2", "Countdown mode to teleport for escape.", _, true, 1.0, true, 2.0);
+	gc_teleport_countdown_escape_mode 	= CreateConVar("ts_teleport_countdown_escape_mode", "1", "Countdown mode to teleport for escape.", _, true, 1.0, true, 2.0);
 	gc_teleport_countdown_escape_vehile = CreateConVar("ts_teleport_countdown_escape_vehicle", "15", "Countdown to rescue transport departure.", _, true, 5.0, true, 240.0);
 	gc_teleport_countdown_saferoom 		= CreateConVar("ts_teleport_countdown_saferoom", "10", "Countdown to teleportation to saferoom. 0 - is disabled", _, true, 0.0, true, 240.0);
 	gc_teleport_percent 				= CreateConVar("ts_teleport_percent", "50", "Percentage of survivors required for activation", _, true, 1.0, true, 100.0);
