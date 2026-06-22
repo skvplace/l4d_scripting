@@ -109,7 +109,7 @@ any native_CreateRTimer(Handle plugin, int numParams)
 	
 	float gametime = GetGameTime();
 	
-	if (!IsRtimerSpawn())
+	if (!IsRtimerSpawn() && !RTimerSpawn())
 	{
 		if (interval < 0.04 || (gametime < 1.21 && gametime + interval < 1.21 + MIN_INTERVAL))
 		{
@@ -395,11 +395,11 @@ int RTimerGetId(Handle timer)
 	return 0;
 }
 
-void RTimerSpawn()
+int RTimerSpawn()
 {
 	if (IsRtimerSpawn())
 	{
-		return;
+		return 0;
 	}
 	
 	gi_logic_timer = -1;
@@ -407,7 +407,7 @@ void RTimerSpawn()
 	int entity = CreateEntityByName("logic_timer");
 	if (entity == -1)
 	{
-		return;
+		return 0;
 	}
 	
 	DispatchKeyValue(entity, "targetname", NAME_RTIMER);
@@ -422,6 +422,8 @@ void RTimerSpawn()
 	
 	HookSingleEntityOutput(entity, "OnTimer", OnTimer);
 	HookSingleEntityOutput(entity, "OnKilled", OnKilled);
+
+	return entity;
 }
 
 bool IsRtimerSpawn()
