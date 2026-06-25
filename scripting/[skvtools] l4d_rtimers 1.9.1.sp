@@ -22,7 +22,7 @@ public Plugin myinfo =
 	name 		= "[skvtools] l4d_rtimers",
 	author 		= "Skv",
 	description = "Creates and manages timers that are active only during round",
-	version 	= "1.9",
+	version 	= "1.9.1",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2842880#post2842880"
 }
 
@@ -49,7 +49,6 @@ int 		gi_users						[MAXPLAYERS + 1];
 bool 		gb_server_empty;
 
 int 		gi_logic_timer;
-
 int 		gi_timerid_count;
 
 public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max)
@@ -109,9 +108,9 @@ any native_CreateRTimer(Handle plugin, int numParams)
 	
 	float gametime = GetGameTime();
 	
-	if (!IsRtimerSpawn() && !RTimerSpawn())
+	if (!IsRtimerSpawn())
 	{
-		if (interval < 0.04 || (gametime < 1.21 && gametime + interval < 1.21 + MIN_INTERVAL))
+		if ((gametime < 1.21 && (gametime + interval) < (1.21 + MIN_INTERVAL)) || !RTimerSpawn())
 		{
 			ThrowNativeError(429, "\"Attempt to create a timer outside of a round with interval %f!\"", GetNativeCell(1));
 			
@@ -534,14 +533,6 @@ void RTimerFire(int i)
 	else
 	{
 		action = 4;
-	}
-	
-	float gametime = GetGameTime();
-	
-	if (gametime - gf_timer_create[i] < MIN_INTERVAL)
-	{
-		RTimerDelete(i);
-		return;
 	}
 	
 	if ((gi_timer_flags[i] & TIMER_REPEAT) && action != 4 && gf_timer_interval[i] > 0.0)
