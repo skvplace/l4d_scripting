@@ -24,7 +24,7 @@ public Plugin myinfo =
 	name 		= "[L4D] Teleport survivors",
 	author 		= "Skv",
 	description = "Teleports belated survivors to elevators, shelters, and rescue vehicles",
-	version 	= "3.5.1",
+	version 	= "3.6",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2841063#post2841063"
 }
 
