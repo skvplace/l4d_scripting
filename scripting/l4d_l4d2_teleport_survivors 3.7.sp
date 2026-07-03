@@ -24,7 +24,7 @@ public Plugin myinfo =
 	name 		= "[L4D] Teleport survivors",
 	author 		= "Skv",
 	description = "Teleports belated survivors to elevators, shelters, and rescue vehicles",
-	version 	= "3.6",
+	version 	= "3.7",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2841063#post2841063"
 }
 
@@ -533,57 +533,36 @@ void OnFullyClosed(char [] output, int safedoor, int client, float delay)
 	pos_door[2] += vMins[2];
 	pos_door[2] += (vMins[2] * (-1) + vMaxs[2]) * 0.1; // 0.36
 	
-	float ang_entity[3];
-						
-	ang_entity[0] = 0.0;
-	ang_entity[1] = GetAngleOrigin(gv_pos_opener, pos_door);
-	ang_entity[2] = 0.0;
-		
+	GetEntPropVector(safedoor, Prop_Data, "m_angRotation", ang_door);
+	
 	gv_pos_teleport = pos_door;	
-	MovePos_Forward(gv_pos_teleport, ang_entity, 90.0);		
+	MovePos_Forward(gv_pos_teleport, ang_door, 90.0);
 	
-	distance = 30.0;
-	
-	if (!IsVisibleOrigin(gv_pos_teleport, pos_door, safedoor))
+	if (IsVisibleOrigin(gv_pos_teleport, gv_pos_opener, safedoor))
 	{
 		GetEntPropVector(safedoor, Prop_Data, "m_angRotation", ang_door);
-				
+		
 		ang_door[0] = 0.0;
-		ang_door[1] -= 90.0;
+		
+		if (ang_door[1] < 0.0)
+		{
+			ang_door[1] += 180.0;
+		}
+		else
+		{
+			ang_door[1] -= 180.0;
+		}
+		
 		ang_door[2] = 0.0;
 		
-		MovePos_Forward(gv_pos_teleport, ang_door, distance);
+		gv_pos_teleport = pos_door;
+		MovePos_Forward(gv_pos_teleport, ang_door, 90.0);
 		
-		if (!IsVisibleOrigin(gv_pos_teleport, pos_door, safedoor))
+		if (IsVisibleOrigin(gv_pos_teleport, gv_pos_opener, safedoor))
 		{
-			MovePos_Forward(gv_pos_teleport, ang_door, distance);
-			
-			if (!IsVisibleOrigin(gv_pos_teleport, pos_door, safedoor))
-			{
-				GetEntPropVector(safedoor, Prop_Data, "m_angRotation", ang_door);
-				
-				ang_door[0] = 0.0;
-				ang_door[1] += 90.0;
-				ang_door[2] = 0.0;
-				
-				MovePos_Forward(gv_pos_teleport, ang_door, distance * 3.0);
-								
-				if (!IsVisibleOrigin(gv_pos_teleport, pos_door, safedoor))
-				{
-					MovePos_Forward(gv_pos_teleport, ang_door, distance);
-										
-					if (!IsVisibleOrigin(gv_pos_teleport, pos_door, safedoor))
-					{
-						gv_pos_teleport[0] = 0.0;
-						gv_pos_teleport[1] = 0.0;
-						gv_pos_teleport[2] = 0.0;						
-						
-						return;
-					}
-				}
-			}
+			return;
 		}
-	}		
+	}
 		
 	RTimerKill(gt_OnTrigger);
 	
@@ -600,25 +579,33 @@ bool IsVisibleOrigin(float pos_1[3], float pos_2[3], int entity)
 	float pos_start[3];
 	pos_start = pos_1;
 	
+	pos_start[2] += 30.0;
+	
 	float pos_end[3];
 	pos_end = pos_2;
 	
-	Handle trace = TR_TraceRayFilterEx(pos_start, pos_end, MASK_SOLID, RayType_EndPoint, TraceFilter_Visible);
+	pos_end[2] += 30.0;
+	
+	Handle trace = TR_TraceRayFilterEx(pos_start, pos_end, MASK_VISIBLE, RayType_EndPoint, TraceFilter_VisibleSafeDoor, entity);
+	
 	if (TR_DidHit(trace))
 	{
-		int index = TR_GetEntityIndex(trace);
-		delete trace;
-		
-		if (index == entity)
-		{
-			return true;
-		}
-		
+		delete trace;	
 		return false;
 	}
 	
 	delete trace;
 	return true;
+}
+
+bool TraceFilter_VisibleSafeDoor(int entity, int contentsMask, int door)
+{
+	if (entity == door) 
+	{
+		return true;
+	}
+	
+	return false;
 }
 
 void OnStartTouch_Escape(const char[] output, int trigger, int client, float delay)
