@@ -539,9 +539,51 @@ void OnFullyClosed(char [] output, int safedoor, int client, float delay)
 	ang_entity[1] = GetAngleOrigin(gv_pos_opener, pos_door);
 	ang_entity[2] = 0.0;
 		
-	MovePos_Forward(pos_door, ang_entity, 90.0);
+	gv_pos_teleport = pos_door;	
+	MovePos_Forward(gv_pos_teleport, ang_entity, 90.0);		
+	
+	distance = 30.0;
+	
+	if (!IsVisibleOrigin(gv_pos_teleport, pos_door, safedoor))
+	{
+		GetEntPropVector(safedoor, Prop_Data, "m_angRotation", ang_door);
+				
+		ang_door[0] = 0.0;
+		ang_door[1] -= 90.0;
+		ang_door[2] = 0.0;
+		
+		MovePos_Forward(gv_pos_teleport, ang_door, distance);
+		
+		if (!IsVisibleOrigin(gv_pos_teleport, pos_door, safedoor))
+		{
+			MovePos_Forward(gv_pos_teleport, ang_door, distance);
 			
-	gv_pos_teleport = pos_door;		
+			if (!IsVisibleOrigin(gv_pos_teleport, pos_door, safedoor))
+			{
+				GetEntPropVector(safedoor, Prop_Data, "m_angRotation", ang_door);
+				
+				ang_door[0] = 0.0;
+				ang_door[1] += 90.0;
+				ang_door[2] = 0.0;
+				
+				MovePos_Forward(gv_pos_teleport, ang_door, distance * 3.0);
+								
+				if (!IsVisibleOrigin(gv_pos_teleport, pos_door, safedoor))
+				{
+					MovePos_Forward(gv_pos_teleport, ang_door, distance);
+										
+					if (!IsVisibleOrigin(gv_pos_teleport, pos_door, safedoor))
+					{
+						gv_pos_teleport[0] = 0.0;
+						gv_pos_teleport[1] = 0.0;
+						gv_pos_teleport[2] = 0.0;						
+						
+						return;
+					}
+				}
+			}
+		}
+	}		
 		
 	RTimerKill(gt_OnTrigger);
 	
@@ -551,6 +593,32 @@ void OnFullyClosed(char [] output, int safedoor, int client, float delay)
 	
 	WritePackCell(pack, EntIndexToEntRef(trigger));
 	WritePackCell(pack, countdown);
+}
+
+bool IsVisibleOrigin(float pos_1[3], float pos_2[3], int entity)
+{	
+	float pos_start[3];
+	pos_start = pos_1;
+	
+	float pos_end[3];
+	pos_end = pos_2;
+	
+	Handle trace = TR_TraceRayFilterEx(pos_start, pos_end, MASK_SOLID, RayType_EndPoint, TraceFilter_Visible);
+	if (TR_DidHit(trace))
+	{
+		int index = TR_GetEntityIndex(trace);
+		delete trace;
+		
+		if (index == entity)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	delete trace;
+	return true;
 }
 
 void OnStartTouch_Escape(const char[] output, int trigger, int client, float delay)
