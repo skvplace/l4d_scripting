@@ -49,7 +49,6 @@ Handle 	gt_EscapeVehicle_Countdown;
 Handle 	gt_Force_PlayerSuicide				[MAX_SURVIVORID + 1];
 Handle 	gt_OnTrigger;
 Handle 	gt_Teleport;
-Handle 	gt_SearchFarBots;
 Handle 	gt_TimerThreat						[MAX_SURVIVORID + 1];
 Handle 	gt_BotHelps							[MAX_SURVIVORID + 1];
 
@@ -321,7 +320,7 @@ public void OnGameplayStart(int stage)
 	gf_teleport_bot_interval = GetConVarFloat(gc_teleport_bot_interval);
 	if (gf_teleport_bot_interval >= 1.0)
 	{
-		gt_SearchFarBots = RTimerCreate(gf_teleport_bot_interval, SearchFarBots, _, TIMER_REPEAT | TIMER_FLAG_NO_ROUNDCHANGE);
+		RTimerCreate(gf_teleport_bot_interval, SearchFarBots, _, TIMER_REPEAT | TIMER_FLAG_NO_ROUNDCHANGE);
 	}
 	
 	gf_teleport_bot_threat_distance = GetConVarFloat(gc_teleport_bot_threat_distance);
@@ -1045,7 +1044,6 @@ Action OnTrigger(Handle timer, Handle h_data)
 		RTimerKill(gt_Teleport);
 		Teleport(null, EntIndexToEntRef(trigger));
 		
-		gt_OnTrigger = null;
 		return Plugin_Stop;
 	}
 	
@@ -1229,17 +1227,8 @@ public void OnServerEmpty()
 
 void Delete_Timers()
 {
-	RTimerKill(gt_OnTrigger);
-	RTimerKill(gt_Teleport);
-	RTimerKill(gt_SearchFarBots);
-	RTimerKill(gt_EscapeVehicle_Countdown);
-	
 	for (int i = 1; i <= MAX_SURVIVORID; i++)
 	{
-		RTimerKill(gt_TimerThreat[i]);
-		RTimerKill(gt_BotHelps[i]);
-		RTimerKill(gt_Force_PlayerSuicide[i]);
-		
 		gi_help_owner	[i] = 0;
 		gi_help_target	[i] = 0;
 	}
@@ -1416,7 +1405,6 @@ Action Teleport(Handle timer, int ref)
 {
 	if (gb_mission_lost)
 	{
-		gt_Teleport = null;
 		return Plugin_Stop;
 	}
 	
@@ -1435,7 +1423,6 @@ Action Teleport(Handle timer, int ref)
 	int trigger = EntRefToEntIndex(ref);
 	if (!IsEntityValid(trigger))
 	{
-		gt_Teleport = null;
 		return Plugin_Stop;
 	}
 	
@@ -1527,7 +1514,6 @@ Action Teleport(Handle timer, int ref)
 		}
 	}
 	
-	gt_Teleport = null;
 	return Plugin_Stop;
 }
 
@@ -1600,7 +1586,7 @@ bool TraceFilter_VisibleClient(int entity, int contentsMask)
 
 void Teleport_Cancel()
 {
-	if (gt_Teleport != null)
+	if (RTimerIsValid(gt_Teleport))
 	{
 		PrintHintTextToAll("%t", "Teleport Canceled");
 		RTimerKill(gt_Teleport);
@@ -2171,7 +2157,7 @@ void Event_player_attacked(Handle event, const char[] name, bool dontBroadcast)
 		return;
 	}
 	
-	if (gt_TimerThreat[survivorid] != null)
+	if (RTimerIsValid(gt_TimerThreat[survivorid]))
 	{
 		return;
 	}
@@ -2210,7 +2196,7 @@ void Event_player_hurt(Handle event, const char[] name, bool dontBroadcast)
 	if (IsSurvivorIncapacitated(client) || IsSurvivorHanging(client))
 	{
 		int bot = gi_help_owner[survivorid];
-		if (bot || gt_TimerThreat[survivorid])
+		if (bot || RTimerIsValid(gt_TimerThreat[survivorid]))
 		{
 			return;
 		}
@@ -2250,7 +2236,7 @@ void Event_player_need_help(Handle event, const char[] name, bool dontBroadcast)
 		return;
 	}
 	
-	if (gt_TimerThreat[survivorid] != null)
+	if (RTimerIsValid(gt_TimerThreat[survivorid]))
 	{
 		return;
 	}
@@ -2274,35 +2260,30 @@ void Event_revive_success(Handle event, const char[] name, bool dontBroadcast)
 
 void TeleportBotToSurvivor(Handle timer, int survivorid)
 {
-	if (gt_BotHelps[survivorid] != null)
+	if (RTimerIsValid(gt_BotHelps[survivorid]))
 	{
-		gt_TimerThreat[survivorid] = null;
 		return;
 	}
 	
 	int client = GetClientOfSurvivorId(survivorid);
 	if (!IsValidClientTeam2Alive(client))
 	{
-		gt_TimerThreat[survivorid] = null;
 		return;
 	}
 	
 	if (IsSurvivorReviveOwner(client))
 	{
-		gt_TimerThreat[survivorid] = null;
 		return;
 	}
 	
 	int bot = GetNearBot(client);
 	if (!bot)
 	{
-		gt_TimerThreat[survivorid] = null;
 		return;
 	}
 	
 	if (!HelpState_Set(client, bot))
 	{
-		gt_TimerThreat[survivorid] = null;
 		return;
 	}
 	
@@ -2330,8 +2311,6 @@ void TeleportBotToSurvivor(Handle timer, int survivorid)
 	}
 	
 	gt_BotHelps[survivorid] = RTimerCreate(1.0, BotHelps, survivorid, TIMER_REPEAT | TIMER_FLAG_NO_ROUNDCHANGE);
-	
-	gt_TimerThreat[survivorid] = null;
 }
 
 Action BotHelps(Handle timer, int survivorid)
@@ -2341,7 +2320,6 @@ Action BotHelps(Handle timer, int survivorid)
 	{
 		HelpState_RemoveByClient(client);
 		
-		gt_BotHelps[survivorid] = null;
 		return Plugin_Stop;
 	}
 	
@@ -2350,13 +2328,11 @@ Action BotHelps(Handle timer, int survivorid)
 	{
 		HelpState_Remove(client, bot);
 		
-		gt_BotHelps[survivorid] = null;
 		return Plugin_Stop;
 	}
 		
 	if (IsSurvivorReviveOwner(client) && IsSurvivorReviveOwner(client) != bot)
 	{
-		gt_BotHelps[survivorid] = null;
 		return Plugin_Stop;
 	}
 	
@@ -2405,7 +2381,6 @@ Action BotHelps(Handle timer, int survivorid)
 	
 	HelpState_Remove(client, bot);
 	
-	gt_BotHelps[survivorid] = null;
 	return Plugin_Stop;
 }
 
