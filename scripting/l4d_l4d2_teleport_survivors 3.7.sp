@@ -1227,6 +1227,11 @@ public void OnServerEmpty()
 
 void Delete_Timers()
 {
+	for (int i = 1; i <= MAX_ESCAPE_DATA; i++)
+	{
+		gi_escape_trigger_hammerid[i] = 0;
+	}
+	
 	for (int i = 1; i <= MAX_SURVIVORID; i++)
 	{
 		gi_help_owner	[i] = 0;
