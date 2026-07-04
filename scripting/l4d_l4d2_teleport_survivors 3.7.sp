@@ -371,8 +371,6 @@ public void OnGameplayStart(int stage)
 			}
 		}
 	}
-	
-	KeyValuesToFile(gk_escape_enabler, "addons/sourcemod/data/escape_enabler.txt");
 }
 
 void OnPressed(const char[] output, int button, int activator, float delay)
