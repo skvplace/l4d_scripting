@@ -533,7 +533,7 @@ void OnFullyClosed(char [] output, int safedoor, int client, float delay)
 	GetEntPropVector(safedoor, Prop_Data, "m_angRotation", ang_door);
 	
 	gv_pos_teleport = pos_door;	
-	MovePos_Forward(gv_pos_teleport, ang_door, 90.0);
+	MovePos_Forward(gv_pos_teleport, ang_door, 15.0);
 	
 	if (IsVisibleOrigin(gv_pos_teleport, gv_pos_opener, safedoor))
 	{
@@ -553,18 +553,30 @@ void OnFullyClosed(char [] output, int safedoor, int client, float delay)
 		ang_door[2] = 0.0;
 		
 		gv_pos_teleport = pos_door;
-		MovePos_Forward(gv_pos_teleport, ang_door, 90.0);
+		MovePos_Forward(gv_pos_teleport, ang_door, 15.0);
 		
 		if (IsVisibleOrigin(gv_pos_teleport, gv_pos_opener, safedoor))
 		{
 			float vec[3];
 			gv_pos_opener 	= vec;
+			gv_pos_teleport = vec;
 
 			return;
 		}
 	}
 		
+	MovePos_Forward(gv_pos_teleport, ang_door, 75.0);
+	
 	RTimerKill(gt_OnTrigger);
+	
+	if (!IsOriginInSafeRoom(gv_pos_teleport))
+	{
+		float vec[3];
+		gv_pos_opener 	= vec;
+		gv_pos_teleport = vec;
+		
+		return;
+	}
 	
 	DataPack pack;
 	
@@ -572,6 +584,33 @@ void OnFullyClosed(char [] output, int safedoor, int client, float delay)
 	
 	WritePackCell(pack, EntIndexToEntRef(trigger));
 	WritePackCell(pack, countdown);
+}
+
+bool IsOriginInSafeRoom(float vOrigin[3])
+{
+	int entity = FindEntityByClassname(-1, "info_changelevel");
+	if (!IsEntityValid(entity))
+	{
+		return false;
+	}
+	
+	float vMins[3];
+	GetEntPropVector(entity, Prop_Data, "m_vecMins", vMins);
+	
+	float vMaxs[3];
+	GetEntPropVector(entity, Prop_Data, "m_vecMaxs", vMaxs);
+	
+	if (vOrigin[0] >= vMins[0] &&
+		vOrigin[0] <= vMaxs[0] &&
+		vOrigin[1] >= vMins[1] &&
+		vOrigin[1] <= vMaxs[1] &&
+		vOrigin[2] >= vMins[2] &&
+		vOrigin[2] <= vMaxs[2])
+	{
+		return true;
+	}
+	
+	return false;
 }
 
 bool IsVisibleOrigin(float pos_1[3], float pos_2[3], int entity)
