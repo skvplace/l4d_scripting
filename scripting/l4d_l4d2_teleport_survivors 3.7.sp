@@ -560,6 +560,9 @@ void OnFullyClosed(char [] output, int safedoor, int client, float delay)
 		
 		if (IsVisibleOrigin(gv_pos_teleport, gv_pos_opener, safedoor))
 		{
+			float vec[3];
+			gv_pos_opener 	= vec;
+
 			return;
 		}
 	}
@@ -1243,9 +1246,9 @@ void Delete_Timers()
 		gi_help_target	[i] = 0;
 	}
 	
-	gv_pos_opener[0] = 0.0;
-	gv_pos_opener[1] = 0.0;
-	gv_pos_opener[2] = 0.0;
+	float vec[3];
+	gv_pos_opener 	= vec;
+	gv_pos_teleport = vec;
 }
 
 void Search_ButtonTriggers(int button)
@@ -1900,9 +1903,8 @@ void EscapeTriggers_Remove()
 
 void Search_SafeDoor()
 {
-	gv_pos_teleport[0] = 0.0;
-	gv_pos_teleport[1] = 0.0;
-	gv_pos_teleport[2] = 0.0;
+	float vec[3];
+	gv_pos_teleport = vec;
 		
 	int safedoor = -1;
 		
