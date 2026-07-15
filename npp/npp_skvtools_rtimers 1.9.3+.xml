@@ -112,6 +112,16 @@ Notes:
                 <Param name="Handle timer"/>
             </Overload>
         </KeyWord>
+        <KeyWord name="RTimerGetTime" func="yes">
+            <Overload retVal="native float" descr="
+Params:
+    timer                   Handle to the timer object.
+Notes:
+    Returns the game time the timer was created, or 0 if unsuccessful.
+">
+                <Param name="Handle timer"/>
+            </Overload>
+        </KeyWord>
         <KeyWord name="RTimerGetInterval" func="yes">
             <Overload retVal="native float" descr="
 Params:
