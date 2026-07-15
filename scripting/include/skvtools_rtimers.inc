@@ -16,7 +16,7 @@
 
 #endif 
 
-#define RTIMERS_VERSION 				"1.8.1"
+#define RTIMERS_VERSION 				"1.9.3"
 #define TIMER_FLAG_NO_ROUNDCHANGE   	(1<<2)	/* < Timer will not carry over round */
 
 /**
@@ -195,6 +195,13 @@ native bool RTimerPause(Handle timer, int pause);
  * @param timer         Handle to the timer object.
 */
 native float RTimerGetRemaining(Handle timer);
+
+/**
+ * Returns the game time the timer was created, or 0 if unsuccessful.
+ *
+ * @param timer         Handle to the timer object.
+*/
+native float RTimerGetTime(Handle timer);
 
 /**
  * Returns the timer interval, or 0 if unsuccessful.
