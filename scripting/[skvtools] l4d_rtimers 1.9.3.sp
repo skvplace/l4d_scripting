@@ -68,6 +68,7 @@ public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max
 	CreateNative("RTimerRemove", 			native_RTimerRemove);
 	
 	CreateNative("RTimerGetRemaining", 		native_RTimerGetRemaining);
+	CreateNative("RTimerGetTime", 			native_RTimerGetTime);
 	
 	CreateNative("RTimerGetInterval", 		native_RTimerGetInterval);
 	CreateNative("RTimerSetInterval", 		native_RTimerSetInterval);
@@ -178,6 +179,17 @@ any native_RTimerGetRemaining(Handle plugin, int numParams)
 	}
 	
 	return gf_timer_firetime[i] - GetGameTime();
+}
+
+any native_RTimerGetTime(Handle plugin, int numParams)
+{
+	int i = RTimerGetId(GetNativeCell(1));
+	if (!i)
+	{
+		return 0.0;
+	}
+	
+	return gf_timer_create[i];
 }
 
 any native_RTimerGetInterval(Handle plugin, int numParams)
