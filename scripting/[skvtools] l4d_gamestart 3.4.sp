@@ -1,6 +1,6 @@
 /**
  * ========================================================================
- * Plugin l4d_l4d2_gamestart
+ * Plugin l4d_gamestart
  * Generates game forwards and natives, see skvtools_gamestart.inc
  * All Left 4 Dead and Left 4 Dead 2 game modes are currently supported.
  * ========================================================================
