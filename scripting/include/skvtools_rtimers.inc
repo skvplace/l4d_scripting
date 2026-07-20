@@ -16,7 +16,7 @@
 
 #endif 
 
-#define RTIMERS_VERSION 				"1.9.3"
+#define RTIMERS_VERSION 				"1.9.4"
 #define TIMER_FLAG_NO_ROUNDCHANGE   	(1<<2)	/* < Timer will not carry over round */
 
 /**
@@ -215,6 +215,8 @@ native float RTimerGetInterval(Handle timer);
  *
  * @param timer         Handle to the timer object.
  * @param interval      Interval in seconds.
+ * 
+ * @error               The new interval cannot be a negative number. 
 */
 native bool RTimerSetInterval(Handle timer, float interval);
 
@@ -261,6 +263,8 @@ stock bool RTimerSetValue(Handle timer, any value)
  *
  * @param timer         Handle to the timer object.
  * @param seconds       Number of seconds.
+ * 
+ * @error               The added value is less than 0.
 */
 native bool RTimerAddInterval(Handle timer, float seconds);
 
@@ -270,6 +274,8 @@ native bool RTimerAddInterval(Handle timer, float seconds);
  *
  * @param timer         Handle to the timer object.
  * @param seconds       Number of seconds.
+ * 
+ * @error               The subtrahend value is less than 0.
 */
 native bool RTimerSubInterval(Handle timer, float seconds);
 
