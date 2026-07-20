@@ -22,7 +22,7 @@ public Plugin myinfo =
 	name 		= "[skvtools] l4d_rtimers",
 	author 		= "Skv",
 	description = "Creates and manages timers that are active only during round",
-	version 	= "1.9.3",
+	version 	= "1.9.4",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2842880#post2842880"
 }
 
@@ -31,6 +31,7 @@ bool 		gb_error_state_delete;
 
 #define 	NAME_RTIMER 					"skvtools_rtimer"
 #define 	MIN_INTERVAL 					0.033 	// minimum timer operation interval >= 0.01
+#define 	MIN_CREATE_TIME 				1.21 	// 1.09...1.20 <= MIN_CREATE_TIME
 #define 	MAX_RTIMERS   					512 	// sets the maximum number of timers that can run simultaneously
 
 Handle 		gh_timer						[MAX_RTIMERS + 1];
@@ -89,7 +90,6 @@ public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max
 public void OnPluginStart()
 {
 	HookEvent("round_end", 			Event_round_end);
-	
 	HookEvent("player_connect", 	Event_player_connect);
 	HookEvent("player_disconnect", 	Event_player_disconnect);
 }
@@ -111,7 +111,7 @@ any native_CreateRTimer(Handle plugin, int numParams)
 	
 	if (!IsRtimerSpawn())
 	{
-		if ((gametime < 1.21 && (gametime + interval) < (1.21 + MIN_INTERVAL)) || !RTimerSpawn())
+		if ((gametime < MIN_CREATE_TIME && (gametime + interval) < (MIN_CREATE_TIME + MIN_INTERVAL)) || !RTimerSpawn())
 		{
 			ThrowNativeError(429, "\"Attempt to create a timer outside of a round with interval %f!\"", GetNativeCell(1));
 			
@@ -249,6 +249,7 @@ any native_RTimerAddInterval(Handle plugin, int numParams)
 	float 	added_value 	= GetNativeCell(2);
 	if (added_value <= 0.0)
 	{
+		ThrowNativeError(429, "\"The added value (%f) is less than 0.\"", added_value);		
 		return false;
 	}
 	
@@ -267,22 +268,19 @@ any native_RTimerSubInterval(Handle plugin, int numParams)
 	}
 	
 	float subtrahend_value = GetNativeCell(2);
-	if (subtrahend_value <= 0.0)
+	if (subtrahend_value < 0.0)
 	{
+		ThrowNativeError(429, "\"The subtrahend value (%f) is less than 0.\"", subtrahend_value);
 		return false;
 	}
 	
-	gf_timer_firetime	[i] -= subtrahend_value;
-	gf_timer_interval 	[i] -= subtrahend_value;
-				
-	if (gf_timer_interval[i] <= 0.0)
+	if (subtrahend_value > gf_timer_interval[i])
 	{
-		RTimerFire(i);
+		subtrahend_value = gf_timer_interval[i];
 	}
-	else if (gf_timer_interval[i] < MIN_INTERVAL)
-	{
-		gf_timer_interval[i] = MIN_INTERVAL;
-	}			
+	
+	gf_timer_interval[i] -= subtrahend_value;
+	gf_timer_firetime[i] -= subtrahend_value;
 			
 	return true;
 }
@@ -296,7 +294,12 @@ any native_RTimerSetInterval(Handle plugin, int numParams)
 	}
 	
 	float interval_new 	= GetNativeCell(2);
-		
+	if (interval_new < 0.0)
+	{
+		ThrowNativeError(429, "\"The new interval (%f) cannot be a negative number.\"", interval_new);
+		return false;
+	}
+
 	if (interval_new < MIN_INTERVAL)
 	{
 		interval_new = MIN_INTERVAL;
@@ -465,7 +468,6 @@ void OnKilled(char [] output, int timer, int activator, float delay)
 	{
 		if (IsClientInGame(i) && !IsFakeClient(i))
 		{
-			
 			RequestFrame(RTimerSpawn);
 			return;
 		}
@@ -609,11 +611,6 @@ public void OnMapEnd()
 {
 	Delete_RTimers(TIMER_FLAG_NO_MAPCHANGE | TIMER_FLAG_NO_ROUNDCHANGE);
 	
-	Transfer_RTimers();
-}
-
-void Transfer_RTimers()
-{
 	if (gi_logic_timer && IsValidEntity(gi_logic_timer))
 	{
 		UnhookSingleEntityOutput(gi_logic_timer, "OnTimer", OnTimer);
@@ -633,12 +630,10 @@ void Transfer_RTimers()
 	{
 		if (gh_timer[i] != null && gf_timer_firetime[i] > gametime)
 		{
-			gf_timer_firetime[i] -= gametime;
+			gf_timer_firetime[i] 	-= gametime;
+			gf_timer_create[i] 		-= gametime;
 							
-			if (gi_timer_flags[i] & TIMER_REPEAT)
-			{
-			}
-			else
+			if (!(gi_timer_flags[i] & TIMER_REPEAT))
 			{
 				gf_timer_interval[i] = gf_timer_firetime[i];
 			}
@@ -747,7 +742,6 @@ void RTimerClearId(int i)
 	ga_timer_value		[i] = 0;
 	gi_timer_flags		[i] = 0;
 	gi_timer_pause		[i] = 0;
-	
 }
 
 public void OnClientPostAdminCheck(int client)
@@ -793,8 +787,7 @@ void Event_player_disconnect(Handle event, const char [] name, bool dontBroadcas
 	}
 	
 	gb_server_empty = true;
-	
-	
+		
 	Delete_RTimers(0);
 }
 
