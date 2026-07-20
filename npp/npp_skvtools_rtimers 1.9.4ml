@@ -139,6 +139,8 @@ Params:
     interval                Interval in seconds.
 Notes:
     Pauses the timer.
+Error:
+    The new interval cannot be a negative number.
 ">
                 <Param name="Handle timer"/>
                 <Param name="float interval"/>
@@ -195,6 +197,8 @@ Params:
     seconds                 Number of seconds.
 Notes:
     Adds a timer interval (for repeating timers, until the next expiration)
+Error:
+    The added value is less than 0.
 ">
                 <Param name="Handle timer"/>
                 <Param name="float seconds"/>
@@ -208,6 +212,8 @@ Params:
 Notes:
     Decrements the timer interval (for repeating timers, until the next expiration),
     if the received interval is less than 0, the timer fires.
+Error:
+    The subtrahend value is less than 0.
 ">
                 <Param name="Handle timer"/>
                 <Param name="float seconds"/>
