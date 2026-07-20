@@ -31,7 +31,7 @@ bool 		gb_error_state_delete;
 
 #define 	NAME_RTIMER 					"skvtools_rtimer"
 #define 	MIN_INTERVAL 					0.033 	// minimum timer operation interval >= 0.01
-#define 	MIN_CREATE_TIME 				1.21 	// 1.09...1.20 <= MIN_CREATE_TIME
+#define 	MIN_CREATE_TIME 				1.21 	// 1.09...1.20 <= MIN_CREATE_TIME (On one of my servers the minimum time was 1.09 and on the other 1.2, so I took the maximum with a margin of 1.21)
 #define 	MAX_RTIMERS   					512 	// sets the maximum number of timers that can run simultaneously
 
 Handle 		gh_timer						[MAX_RTIMERS + 1];
