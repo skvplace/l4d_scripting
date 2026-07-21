@@ -138,20 +138,13 @@ stock Handle RTimerDataCreate(float interval, RTimer func, Handle &datapack, int
 native bool RTimerIsValid(Handle timer);
 
 /**
- * Starts the timer manually to call the corresponding function 
- * and sets it to NULL if the TIMER_REPEAT flag is missing.
+ * Manually triggers a timer so its function will be called.
  *
  * @param timer         Handle to the timer object.
+ * @param reset         If reset is true, the elapsed time counter is reset
+ *                      so the full interval must pass again.
 */
-stock bool RTimerTrigger(Handle &timer)
-{
-	if (!(RTimerGetFlags(timer) & TIMER_REPEAT))
-	{
-		timer = null;
-	}
-	
-	return TriggerRTimer(timer);
-}
+native bool RTimerTrigger(Handle timer, bool reset = false);
 
 /**
  * Removes the timer.
