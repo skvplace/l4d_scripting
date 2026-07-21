@@ -57,6 +57,16 @@ Return:
                 <Param name="Handle timer"/>
             </Overload>
         </KeyWord>
+        <KeyWord name="RTimerTrigger" func="yes">
+            <Overload retVal="native bool" descr="
+Params:
+    timer                   Handle to the timer object.
+Notes:
+    Manually triggers a timer so its function will be called.
+">
+                <Param name="Handle timer"/>
+            </Overload>
+        </KeyWord>
         <KeyWord name="RTimerKill" func="yes">
             <Overload retVal="bool" descr="
 Params:
@@ -68,26 +78,6 @@ Notes:
 ">
                 <Param name="Handle timer"/>
                 <Param name="bool autoClose=false"/>
-            </Overload>
-        </KeyWord>
-        <KeyWord name="RTimerRemove" func="yes">
-            <Overload retVal="native bool" descr="
-Params:
-    timer                   Handle to the timer object.
-Notes:
-    Removes the timer
-">
-                <Param name="Handle timer"/>
-            </Overload>
-        </KeyWord>
-        <KeyWord name="RTimerTrigger" func="yes">
-            <Overload retVal="native bool" descr="
-Params:
-    timer                   Handle to the timer object.
-Notes:
-    Manually triggers a timer so its function will be called.
-">
-                <Param name="Handle timer"/>
             </Overload>
         </KeyWord>
         <KeyWord name="RTimerPause" func="yes">
