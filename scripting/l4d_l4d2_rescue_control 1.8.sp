@@ -942,6 +942,15 @@ void Rescue_Playsound(int client, int entity)
 	pos_spawn[2] += VISIBLE_HEIGH + 5.0;
 	
 	EmitAmbientSound(temp, pos_spawn, entity);
+	
+	Handle event = CreateEvent("survivor_call_for_help");
+	if (event != null)
+	{ 
+		SetEventInt(event, "userid", GetClientUserId(client));
+		SetEventInt(event, "subject", entity);
+				
+		FireEvent(event);
+	}
 }
 
 int GetActiveRescue(int survivorid)
