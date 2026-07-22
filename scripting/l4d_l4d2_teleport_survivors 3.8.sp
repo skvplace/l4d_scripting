@@ -117,7 +117,7 @@ public void OnPluginStart()
 	gc_teleport_percent_bot 			= CreateConVar("ts_teleport_percent_bot", "1", "The percentage of teleportation should take into account bots.", _, true, 0.0, true, 1.0);
 	gc_teleport_bot_interval 			= CreateConVar("ts_teleport_bot_interval", "30", "What interval in seconds should I scan for lagging bots?. If less than 1, then disabled", _, true, 0.0, true, 240.0); 
 	gc_teleport_bot_distance			= CreateConVar("ts_teleport_bot_distance", "1500", "If the bots are further than this distance, they will be moved", _, true, 500.0, true, 3000.0); 
-	gc_teleport_bot_rescue				= CreateConVar("ts_teleport_bot_rescue", "2.0", "The moment when the bot starts moving at the moment when a survivor calls for help from the rescue room. 0 - is disabled", _, true, 0.0, true, 15.0);
+	gc_teleport_bot_rescue				= CreateConVar("ts_teleport_bot_rescue", "2.0", "When a survivor calls for help from the rescue room, the bot teleports after this number of seconds. 0 - is disabled", _, true, 0.0, true, 15.0);
 	gc_teleport_bot_threat				= CreateConVar("ts_teleport_bot_threat", "2.0", "Bot movement time when threatened. 0 - is disabled", _, true, 0.0, true, 15.0);
 	gc_teleport_bot_help				= CreateConVar("ts_teleport_bot_help", "2.0", "Bot movement time when need help. 0 - is disabled", _, true, 0.0, true, 15.0);
 	gc_teleport_bot_threat_distance		= CreateConVar("ts_teleport_bot_threat_distance", "300", "If the bots are further than this distance, they will be moved", _, true, 300.0, true, 2000.0); 
