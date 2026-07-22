@@ -23,7 +23,7 @@ public Plugin myinfo =
 	name 		= "[L4D/L4D2] Respawn Final",
 	author 		= "Skv",
 	description = "The plugin allows survivors to respawn in the finale",
-	version 	= "1.7.5",
+	version 	= "1.8",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2829933#post2829933"
 }
 
@@ -1137,6 +1137,15 @@ void Rescue_Playsound(int client, int entity)
 	pos_spawn[2] += VISIBLE_HEIGH + 5.0;
 	
 	EmitAmbientSound(temp, pos_spawn, entity);
+	
+	Handle event = CreateEvent("survivor_call_for_help");
+	if (event != null)
+	{ 
+		SetEventInt(event, "userid", GetClientUserId(client));
+		SetEventInt(event, "subject", entity);
+				
+		FireEvent(event);
+	}
 }
 
 int GetActiveRescue(int survivorid)
