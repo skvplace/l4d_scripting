@@ -2285,8 +2285,7 @@ void Event_survivor_call_for_help(Handle event, const char[] name, bool dontBroa
 {
 	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	if (!IsValidClient(client)) {return;}
-	//PrintToChatAll("Event_survivor_call_for_help: client %N", client);
-	
+		
 	int survivorid = GetClientSurvivorId(client);
 	if (!survivorid)
 	{
@@ -2301,8 +2300,6 @@ void Event_survivor_call_for_help(Handle event, const char[] name, bool dontBroa
 	}
 	
 	int entity = GetEventInt(event, "subject");
-	//PrintToChatAll("Event_survivor_call_for_help: subject %d", entity);
-	
 	if (!IsEntityValid(entity))
 	{
 		RTimerKill(gt_TimerRescue[survivorid]);
@@ -2315,8 +2312,6 @@ void Event_survivor_call_for_help(Handle event, const char[] name, bool dontBroa
 	}
 		
 	gt_TimerRescue[survivorid] = RTimerCreate(delay, TeleportBotToRescue, EntIndexToEntRef(entity), TIMER_FLAG_NO_ROUNDCHANGE);
-	
-	//PrintToChatAll("Event_survivor_call_for_help: create gt_TimerRescue for %N", client);
 }
 
 void Event_survivor_rescued(Handle event, const char[] name, bool dontBroadcast)
@@ -2331,22 +2326,17 @@ void Event_survivor_rescued(Handle event, const char[] name, bool dontBroadcast)
 	}
 	
 	RTimerKill(gt_TimerRescue[survivorid]);
-	
-	//PrintToChatAll("Event_survivor_rescued: kill gt_TimerRescue for %N", victim);
 }
 
 Action TeleportBotToRescue(Handle timer, int ref)
 {
 	int entity = EntRefToEntIndex(ref);
-	//PrintToChatAll("TeleportBotToRescue: entity %d", entity);
-	
 	if (!IsEntityValid(entity))
 	{
 		return Plugin_Stop;
 	}
 	
 	int client = GetClientFromTimerRescue(ref);
-	//PrintToChatAll("TeleportBotToRescue: client %N", client);
 	if (!client)
 	{
 		return Plugin_Stop;
@@ -2362,7 +2352,6 @@ Action TeleportBotToRescue(Handle timer, int ref)
 		
 		RTimerSetInterval(timer, 1.0);
 		
-		//PrintToChatAll("TeleportBotToRescue: near bot is null for %N", client);
 		return Plugin_Continue;
 	}
 	
@@ -2370,8 +2359,6 @@ Action TeleportBotToRescue(Handle timer, int ref)
 	GetEntPropVector(entity, Prop_Data, "m_vecOrigin", pos_entity);
 	
 	TeleportEntity(bot, pos_entity);
-	
-	//PrintToChatAll("TeleportBotToRescue: teleport for %N", client);
 	
 	return Plugin_Stop;
 }
@@ -2612,8 +2599,6 @@ int GetNearBot(int entity)
 		return 0;
 	}
 	
-	//PrintToChatAll("GetNearBot: entity %d", entity);
-	
 	float pos_entity[3];
 	
 	int parent = GetEntPropEnt(entity, Prop_Data, "m_pParent");
@@ -2642,8 +2627,7 @@ int GetNearBot(int entity)
 			GetClientAbsOrigin(i, pos_i);
 			
 			distance = GetVectorDistance(pos_i, pos_entity);
-			//PrintToChatAll("GetNearBot: bot %N, distance %d", i, RoundFloat(distance));
-			
+						
 			if (distance <= gf_teleport_bot_threat_distance && IsSameFloor(pos_i[2], pos_entity[2], 100.0))
 			{
 				return 0;
@@ -2656,10 +2640,6 @@ int GetNearBot(int entity)
 					near_distance = distance;
 					near_bot = i;
 				}
-			}
-			else
-			{
-				//PrintToChatAll("GetNearBot: bot %N, gi_help_target busy %d", i, gi_help_target[GetClientSurvivorId(i)]);
 			}
 		}
 	}
