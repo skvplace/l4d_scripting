@@ -64,7 +64,7 @@ public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max
 	
 	CreateNative("RTimerIsValid",			native_RTimerIsValid);
 		
-	CreateNative("TriggerRTimer", 			native_TriggerRTimer);
+	CreateNative("RTimerTrigger", 			native_RTimerTrigger);
 	CreateNative("RTimerPause", 			native_RTimerPause);
 	CreateNative("RTimerRemove", 			native_RTimerRemove);
 	
@@ -326,7 +326,7 @@ any native_RTimerValueSet(Handle plugin, int numParams)
 	return true;
 }
 
-any native_TriggerRTimer(Handle plugin, int numParams)
+any native_RTimerTrigger(Handle plugin, int numParams)
 {
 	int i = RTimerGetId(GetNativeCell(1));
 	if (!i)
