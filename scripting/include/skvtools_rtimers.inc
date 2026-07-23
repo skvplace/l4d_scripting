@@ -305,13 +305,6 @@ native bool RTimerShift(Handle timer, float seconds);
 native bool CreateRTimer(float interval, RTimer func, any value = 0, int flags = 0, Function func_close, Handle timer);
 
 /**
- * Manually starts the timer to call its function.
- *
- * @param timer         Handle to the timer object.
-*/
-native bool TriggerRTimer(Handle timer);
-
-/**
  * Removes the timer.
  *
  * @param timer         Handle to the timer object.
