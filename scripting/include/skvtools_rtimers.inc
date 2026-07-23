@@ -145,17 +145,7 @@ native bool RTimerIsValid(Handle timer);
  * @param reset         If reset is true, the elapsed time counter is reset
  *                      so the full interval must pass again.
 */
-stock bool RTimerTrigger(Handle &timer, bool reset = false)
-{
-	bool result = TriggerRTimer(timer, reset);
-	
-	if (!(RTimerGetFlags(timer) & TIMER_REPEAT))
-	{
-		timer = null;
-	}
-	
-	return result;
-}
+native bool RTimerTrigger(Handle timer, bool reset = false);
 
 /**
  * Removes the timer.
@@ -314,15 +304,6 @@ native bool RTimerShift(Handle timer, float seconds);
  * @error               Attempt to create a timer outside of a round.
 */
 native bool CreateRTimer(float interval, RTimer func, any value = 0, int flags = 0, Function func_close, Handle timer);
-
-/**
- * Manually triggers a timer so its function will be called.
- *
- * @param timer         Handle to the timer object.
- * @param reset         If reset is true, the elapsed time counter is reset
- *                      so the full interval must pass again.
-*/
-native bool TriggerRTimer(Handle timer, bool reset = false);
 
 /**
  * Removes the timer.
