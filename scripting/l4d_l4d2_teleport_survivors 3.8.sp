@@ -1277,6 +1277,7 @@ void Delete_Timers()
 	gv_pos_opener 	= vec;
 	gv_pos_teleport = vec;
 
+	RTimerKill(gt_Teleport);
 }
 
 void Search_ButtonTriggers(int button)
