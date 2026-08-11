@@ -1539,6 +1539,11 @@ Action Teleport(Handle timer, int ref)
 		{
 			UnhookSingleEntityOutput(trigger, "OnStartTouch", OnStartTouch_SafeRoom);
 		}
+		
+		if (!gv_pos_teleport[0] && !gv_pos_teleport[1] && !gv_pos_teleport[2])
+		{
+			return Plugin_Stop;
+		}
 	}
 	else
 	{
