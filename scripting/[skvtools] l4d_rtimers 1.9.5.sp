@@ -22,7 +22,7 @@ public Plugin myinfo =
 	name 		= "[skvtools] l4d_rtimers",
 	author 		= "Skv",
 	description = "Creates and manages timers that are active only during round",
-	version 	= "1.9.4",
+	version 	= "1.9.5",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2842880#post2842880"
 }
 
@@ -64,7 +64,7 @@ public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max
 	
 	CreateNative("RTimerIsValid",			native_RTimerIsValid);
 		
-	CreateNative("RTimerTrigger", 			native_RTimerTrigger);
+	CreateNative("TriggerRTimer", 			native_TriggerRTimer);
 	CreateNative("RTimerPause", 			native_RTimerPause);
 	CreateNative("RTimerRemove", 			native_RTimerRemove);
 	
@@ -326,7 +326,7 @@ any native_RTimerValueSet(Handle plugin, int numParams)
 	return true;
 }
 
-any native_RTimerTrigger(Handle plugin, int numParams)
+any native_TriggerRTimer(Handle plugin, int numParams)
 {
 	int i = RTimerGetId(GetNativeCell(1));
 	if (!i)
