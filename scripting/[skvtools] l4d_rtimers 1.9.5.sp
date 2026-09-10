@@ -331,12 +331,10 @@ any native_TriggerRTimer(Handle plugin, int numParams)
 	int i = RTimerGetId(GetNativeCell(1));
 	if (!i)
 	{
-		return false;
+		return -1;
 	}
 	
-	RTimerFire(i, GetNativeCell(2));
-					
-	return true;
+	return RTimerFire(i, GetNativeCell(2));
 }
 
 any native_RTimerShift(Handle plugin, int numParams)
@@ -531,7 +529,7 @@ void RTimerFire(int i, bool reset = true)
 {
 	if (gb_server_empty)
 	{
-		return;
+		return -1;
 	}
 	
 	int action;
@@ -556,10 +554,17 @@ void RTimerFire(int i, bool reset = true)
 			gf_timer_firetime[i] = GetGameTime() + gf_timer_interval[i];
 		}
 			
-		return;
+		return action;
 	}
 	
 	RTimerDelete(i);
+	
+	if (!(gi_timer_flags[i] & TIMER_REPEAT))
+	{
+		action = 4;
+	}
+	
+	return action;
 }
 
 void RTimerDelete(int i)
