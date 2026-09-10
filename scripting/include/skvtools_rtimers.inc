@@ -151,11 +151,6 @@ stock bool RTimerTrigger(Handle &timer, bool reset = false)
 	{
 		if (!(RTimerGetFlags(timer) & TIMER_REPEAT))
 		{
-			if (RTimerGetFlags(timer) & TIMER_DATA_HNDL_CLOSE)
-			{
-				delete view_as<Handle>(RTimerGetValue(timer));
-			}
-			
 			timer = null;
 		}
 		
