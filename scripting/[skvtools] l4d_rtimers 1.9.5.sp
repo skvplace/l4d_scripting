@@ -544,7 +544,8 @@ void RTimerFire(int i, bool reset = true)
 	}
 	else
 	{
-		action = 4;
+		RTimerDelete(i);
+		return -1;
 	}
 	
 	if ((gi_timer_flags[i] & TIMER_REPEAT) && action != 4 && gf_timer_interval[i] > 0.0)
@@ -559,12 +560,7 @@ void RTimerFire(int i, bool reset = true)
 	
 	RTimerDelete(i);
 	
-	if (!(gi_timer_flags[i] & TIMER_REPEAT))
-	{
-		action = 4;
-	}
-	
-	return action;
+	return 4;
 }
 
 void RTimerDelete(int i)
