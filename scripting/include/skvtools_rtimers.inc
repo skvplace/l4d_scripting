@@ -16,7 +16,7 @@
 
 #endif 
 
-#define RTIMERS_VERSION 				"1.9.4"
+#define RTIMERS_VERSION 				"1.9.5"
 #define TIMER_FLAG_NO_ROUNDCHANGE   	(1<<2)	/* < Timer will not carry over round */
 
 /**
@@ -145,7 +145,25 @@ native bool RTimerIsValid(Handle timer);
  * @param reset         If reset is true, the elapsed time counter is reset
  *                      so the full interval must pass again.
 */
-native bool RTimerTrigger(Handle timer, bool reset = false);
+stock bool RTimerTrigger(Handle &timer, bool reset = false)
+{
+	if (TriggerRTimer(timer, reset))
+	{
+		if (!(RTimerGetFlags(timer) & TIMER_REPEAT))
+		{
+			if (RTimerGetFlags(timer) & TIMER_DATA_HNDL_CLOSE)
+			{
+				delete view_as<Handle>(RTimerGetValue(timer));
+			}
+			
+			timer = null;
+		}
+		
+		return true;
+	}
+	
+	return false;
+}
 
 /**
  * Removes the timer.
@@ -345,3 +363,12 @@ void RTimerClose(Handle timer, any data, int flags = 0)
 		}
 	}
 }
+
+/**
+ * Starts the timer manually to call the corresponding function 
+ *
+ * @param timer         Handle to the timer object.
+ * @param reset         If reset is true, the elapsed time counter is reset
+ *                      so the full interval must pass again.
+*/
+native bool TriggerRTimer(Handle timer, bool reset = false);
