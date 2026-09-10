@@ -139,7 +139,8 @@ native bool RTimerIsValid(Handle timer);
 
 /**
  * Starts the timer manually to call the corresponding function 
- * and sets it to NULL if the TIMER_REPEAT flag is missing.
+ * and sets it to NULL if the TIMER_REPEAT flag is missing 
+ * or the timed function returned Plugin_Stop.
  *
  * @param timer         Handle to the timer object.
  * @param reset         If reset is true, the elapsed time counter is reset
@@ -147,13 +148,11 @@ native bool RTimerIsValid(Handle timer);
 */
 stock bool RTimerTrigger(Handle &timer, bool reset = false)
 {
-	if (TriggerRTimer(timer, reset))
+	int action = TriggerRTimer(timer, reset);
+	
+	if (action == 4)
 	{
-		if (!(RTimerGetFlags(timer) & TIMER_REPEAT))
-		{
-			timer = null;
-		}
-		
+		timer = null;
 		return true;
 	}
 	
