@@ -61,10 +61,15 @@ Return:
             <Overload retVal="native bool" descr="
 Params:
     timer                   Handle to the timer object.
+    reset                   If reset is true, the elapsed time counter is reset
+                            so the full interval must pass again.
 Notes:
-    Manually triggers a timer so its function will be called.
+    Starts the timer manually to call the corresponding function
+    and sets it to NULL if the TIMER_REPEAT flag is missing
+    or the timed function returned Plugin_Stop.
 ">
-                <Param name="Handle timer"/>
+                <Param name="Handle timer"
+                <Param name="bool reset=false"/>
             </Overload>
         </KeyWord>
         <KeyWord name="RTimerKill" func="yes">
