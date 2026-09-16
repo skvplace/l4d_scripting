@@ -148,9 +148,7 @@ native bool RTimerIsValid(Handle timer);
 */
 stock bool RTimerTrigger(Handle &timer, bool reset = false)
 {
-	int action = TriggerRTimer(timer, reset);
-	
-	if (action == 4)
+	if (TriggerRTimer(timer, reset) == 4)
 	{
 		timer = null;
 		return true;
