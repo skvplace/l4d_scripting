@@ -363,4 +363,4 @@ void RTimerClose(Handle timer, any data, int flags = 0)
  * @param reset         If reset is true, the elapsed time counter is reset
  *                      so the full interval must pass again.
 */
-native bool TriggerRTimer(Handle timer, bool reset = false);
+native int TriggerRTimer(Handle timer, bool reset = false);
