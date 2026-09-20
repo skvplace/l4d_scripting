@@ -17,7 +17,7 @@
 #endif 
 
 #define RTIMERS_VERSION 				"1.9.5"
-#define TIMER_FLAG_NO_ROUNDCHANGE   	(1<<2)	/* < Timer will not carry over round */
+#define TIMER_FLAG_NO_ROUNDCHANGE   	(1<<8)	/* < Timer will not carry over round */
 
 /**
  * Any of the following prototypes will work for a timed function.
