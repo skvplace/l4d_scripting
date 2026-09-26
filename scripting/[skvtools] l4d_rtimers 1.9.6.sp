@@ -747,6 +747,12 @@ void Delete_RTimers(int flags)
 
 void RTimerClearId(int i, bool count_available = true)
 {
+	if (count_available && gh_timer[i] != null)
+	{
+		gi_timerid_count_free ++;
+		gi_timerid_free[gi_timerid_count_free] = i;
+	}	
+
 	gh_timer			[i] = null;
 	
 	gh_plugin			[i] = null;
@@ -760,12 +766,6 @@ void RTimerClearId(int i, bool count_available = true)
 	ga_timer_value		[i] = 0;
 	gi_timer_flags		[i] = 0;
 	gi_timer_pause		[i] = 0;
-	
-	if (count_available)
-	{
-		gi_timerid_count_free ++;
-		gi_timerid_free[gi_timerid_count_free] = i;
-	}
 }
 
 public void OnClientPostAdminCheck(int client)
