@@ -50,6 +50,7 @@ int 		gi_users						[MAXPLAYERS + 1];
 bool 		gb_server_empty;
 
 int 		gi_logic_timer;
+
 int 		gi_timerid_count;
 int 		gi_timerid_count_free;
 int 		gi_timerid_free					[MAX_RTIMERS + 1];
@@ -123,7 +124,6 @@ any native_CreateRTimer(Handle plugin, int numParams)
 	int i = GetFreeTimerID();
 	if (i && gh_timer[i] == null)
 	{
-		gh_plugin			[i] = plugin;
 		gh_func				[i] = GetNativeFunction(2);
 		
 		gf_timer_create		[i] = gametime;
@@ -136,6 +136,7 @@ any native_CreateRTimer(Handle plugin, int numParams)
 		
 		gh_func_close		[i] = GetNativeFunction(5);
 		gh_timer			[i] = GetNativeCell(6);
+		gh_plugin			[i] = GetNativeCell(7);
 							
 		return true;
 	}
