@@ -17,7 +17,7 @@
 #endif 
 
 #define RTIMERS_VERSION 				"1.9.6"
-#define TIMER_FLAG_NO_ROUNDCHANGE   	(1<<8)	/* < Timer will not carry over round */
+#define TIMER_FLAG_NO_ROUNDCHANGE   	(1<<10)	/* < Timer will not carry over round */
 
 /**
  * Any of the following prototypes will work for a timed function.
@@ -84,7 +84,7 @@ typeset RTimer
 stock Handle RTimerCreate(float interval, RTimer func, any value = 0, int flags = 0)
 {
 	Handle timer = CreateDataPack();
-	if (CreateRTimer(interval, func, value, flags, RTimerClose, timer))
+	if (CreateRTimer(interval, func, value, flags, RTimerClose, timer, GetMyHandle()))
 	{
 		return timer;
 	}
@@ -119,7 +119,7 @@ stock Handle RTimerDataCreate(float interval, RTimer func, Handle &datapack, int
 	flags |= TIMER_DATA_HNDL_CLOSE;
 	
 	Handle timer = CreateDataPack();
-	if (CreateRTimer(interval, func, datapack, flags, RTimerClose, timer))
+	if (CreateRTimer(interval, func, datapack, flags, RTimerClose, timer, GetMyHandle()))
 	{
 		return timer;
 	}
@@ -307,13 +307,14 @@ native bool RTimerShift(Handle timer, float seconds);
  * @param flags         Timer flags.
  * @param func_close    Handle deletion callback function (RTimerClose).
  * @param timer         Handle to the timer object.
+ * @param plugin        Handle to the plugin object.
  *
  * @return              true or false if unsuccessful. You do not need to call delete view_as<Handle>(). 
  *                      If the timer could  not be created, INVALID_HANDLE will be returned.
  *
  * @error               Attempt to create a timer outside of a round.
 */
-native bool CreateRTimer(float interval, RTimer func, any value = 0, int flags = 0, Function func_close, Handle timer);
+native bool CreateRTimer(float interval, RTimer func, any value = 0, int flags = 0, Function func_close, Handle timer, Handle plugin);
 
 /**
  * Removes the timer.
