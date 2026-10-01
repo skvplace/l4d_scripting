@@ -1238,6 +1238,7 @@ void Event_finale_win(Handle event, const char[] name, bool dontBroadcast)
 public void OnMapEnd()
 {
 	Delete_Timers();
+	Delete_Files();
 }
 
 public void OnMapTransit()
@@ -1258,7 +1259,16 @@ public void OnMissionChange()
 public void OnServerEmpty()
 {
 	Delete_Timers();
+	Delete_Files();
 
+	char plugin_name[PLATFORM_MAX_PATH];
+	GetPluginFilename(INVALID_HANDLE, plugin_name, sizeof(plugin_name));
+	
+	ServerCommand("sm plugins reload \"%s\"", plugin_name);
+}
+
+void Delete_Files()
+{
 	if (FileExists(FILE_BUTTON_TRIGGER))
 	{
 		DeleteFile(FILE_BUTTON_TRIGGER);
@@ -1268,11 +1278,6 @@ public void OnServerEmpty()
 	{
 		DeleteFile(FILE_ESCAPE_ENABLER);
 	}
-
-	char plugin_name[PLATFORM_MAX_PATH];
-	GetPluginFilename(INVALID_HANDLE, plugin_name, sizeof(plugin_name));
-	
-	ServerCommand("sm plugins reload \"%s\"", plugin_name);
 }
 
 void Delete_Timers()
@@ -1691,15 +1696,7 @@ bool IsValidClientTeleport(int client)
 
 void Search_Trigger()
 {
-	if (FileExists(FILE_BUTTON_TRIGGER))
-	{
-		DeleteFile(FILE_BUTTON_TRIGGER);
-	}
-	
-	if (FileExists(FILE_ESCAPE_ENABLER))
-	{
-		DeleteFile(FILE_ESCAPE_ENABLER);
-	}
+	Delete_Files();
 	
 	if (gk_button_triggers != null)
 	{
