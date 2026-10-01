@@ -24,7 +24,7 @@ public Plugin myinfo =
 	name 		= "[L4D] Teleport survivors",
 	author 		= "Skv",
 	description = "Teleports belated survivors to elevators, shelters, and rescue vehicles",
-	version 	= "3.8.1",
+	version 	= "3.8.2",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2841063#post2841063"
 }
 
@@ -1258,7 +1258,17 @@ public void OnMissionChange()
 public void OnServerEmpty()
 {
 	Delete_Timers();
+
+	if (FileExists(FILE_BUTTON_TRIGGER))
+	{
+		DeleteFile(FILE_BUTTON_TRIGGER);
+	}
 	
+	if (FileExists(FILE_ESCAPE_ENABLER))
+	{
+		DeleteFile(FILE_ESCAPE_ENABLER);
+	}
+
 	char plugin_name[PLATFORM_MAX_PATH];
 	GetPluginFilename(INVALID_HANDLE, plugin_name, sizeof(plugin_name));
 	
@@ -1290,7 +1300,7 @@ void Search_ButtonTriggers(int button)
 			return;
 		}
 		
-		if (!FileToKeyValues(gk_button_triggers, FILE_BUTTON_TRIGGER))
+		if (!FileToKeyValues(gk_button_triggers, ))
 		{
 			return;
 		}
