@@ -1062,11 +1062,10 @@ bool TraceFilter_Visible(int entity, int contentsMask)
 	return true;
 }
 
-Action OnTrigger(Handle timer, Handle h_data)
+Action OnTrigger(Handle timer, DataPack pack)
 {
 	RTimerSetInterval(timer, 1.0);
 	
-	DataPack pack = view_as<DataPack>(h_data);
 	ResetPack(pack);
 	
 	int trigger 	= EntRefToEntIndex(ReadPackCell(pack));
