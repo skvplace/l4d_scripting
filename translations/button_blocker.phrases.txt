@@ -1,0 +1,34 @@
+//  = 0x01 (WHITE)
+//  = 0x02 (WHITE)
+//  = 0x03 (LIGHTGREEN)
+//  = 0x04 (YELLOW)
+//  = 0x05 (GREEN)
+
+"Phrases"
+{
+	"Message1"
+	{
+		"en"		"Wait for other players to come closer!"
+	}
+	"Message2"
+	{
+		"en"		"Get ready!"
+	}
+	"Message1"
+	{						  
+		"ru"		"Дождитесь пока остальные игроки подойдут ближе!"
+	}
+	"Message2"
+	{						  
+		"ru"		"Приготовьтесь!"
+	}
+	"Message1"
+	{						  
+		"de"		"Warten Sie, bis andere Spieler näher kommen!"
+	}
+	"Message2"
+	{						  
+		"de"		"Sich fertig machen!"
+	}
+}
+
