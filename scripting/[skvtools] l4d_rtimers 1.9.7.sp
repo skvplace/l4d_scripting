@@ -22,7 +22,7 @@ public Plugin myinfo =
 	name 		= "[skvtools] l4d_rtimers",
 	author 		= "Skv",
 	description = "Creates and manages timers that are active only during round",
-	version 	= "1.9.6",
+	version 	= "1.9.7",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2842880#post2842880"
 }
 
@@ -550,11 +550,17 @@ int RTimerFire(int i, bool reset = true)
 	
 	if (IsValidPlugin(gh_plugin[i]) && gh_func[i] != INVALID_FUNCTION)
 	{
-		Call_StartFunction(gh_plugin[i], gh_func[i]);
+		Handle hFwd = CreateForward(ET_Event, Param_Cell, Param_Cell); 
+		AddToForward(hFwd, gh_plugin[i], gh_func[i]);
+		
+		Call_StartForward(hFwd);
+
 		Call_PushCell(gh_timer[i]);
 		Call_PushCell(ga_timer_value[i]);
 				
 		Call_Finish(action);
+
+		delete hFwd;
 	}
 	else
 	{
@@ -581,13 +587,18 @@ void RTimerDelete(int i)
 {
 	if (IsValidPlugin(gh_plugin[i]) && gh_func_close[i] && gh_timer[i] != null)
 	{
-		Call_StartFunction(gh_plugin[i], gh_func_close[i]);
+		Handle hFwd = CreateForward(ET_Ignore, Param_Cell, Param_Cell, Param_Cell); 
+		AddToForward(hFwd, gh_plugin[i], gh_func_close[i]);
+		
+		Call_StartForward(hFwd);
 		
 		Call_PushCell(gh_timer[i]);
 		Call_PushCell(ga_timer_value[i]);
 		Call_PushCell(gi_timer_flags[i]);
 			
 		Call_Finish();
+
+		delete hFwd;
 	}
 	
 	RTimerClearId(i);
