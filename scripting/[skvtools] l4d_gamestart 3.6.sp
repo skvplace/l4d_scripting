@@ -15,12 +15,14 @@
 #include <sourcemod>
 #include <sdktools>
 
+#include <skvtools_rtimers>
+
 public Plugin myinfo =
 {
 	name 		= "[skvtools] l4d_gamestart",
 	author 		= "Skv",
 	description = "Сreates a global forwards",
-	version 	= "3.5",
+	version 	= "3.6",
 	url 		= ""
 }
 
@@ -301,7 +303,11 @@ void Event_player_spawn(Handle event, const char [] name, bool dontBroadcast)
 	EventDisable(player_spawn);
 	Delete_Timers();
 		
-	gt_GameplayStart = CreateTimer(0.1, GameplayStart);
+	gt_GameplayStart = RTimerCreate(0.1, GameplayStart);
+	if (!gt_GameplayStart)
+	{
+		LogError("\"%s: Timer not created\"", name);
+	}
 }
 
 void Event_mission_lost(Handle event, const char [] name, bool dontBroadcast)
@@ -366,7 +372,11 @@ void OnHook_logic_auto(char [] output, int caller, int activator, float delay)
 	
 	Delete_Timers();
 		
-	gt_GameplayStart = CreateTimer(0.1, GameplayStart);
+	gt_GameplayStart = RTimerCreate(0.1, GameplayStart);
+	if (!gt_GameplayStart)
+	{
+		LogError("\"OnHook_logic_auto: Timer not created\"");
+	}
 }
 
 void Event_vote_passed(Handle event, const char [] name, bool dontBroadcast)
@@ -433,12 +443,13 @@ void GameplayStart(Handle timer)
 	Call_PushCell(gi_stage);
 	Call_Finish();
 	
-	if (gt_GameplayStart_Stage)
+	RTimerKill(gt_GameplayStart_Stage);
+
+	gt_GameplayStart_Stage = RTimerCreate(1.0, GameplayStart_Stage, _, TIMER_REPEAT | TIMER_FLAG_NO_ROUNDCHANGE);
+	if (!gt_GameplayStart_Stage)
 	{
-		delete gt_GameplayStart_Stage;
+		LogError("\"GameplayStart: Timer not created\"");
 	}
-	
-	gt_GameplayStart_Stage = CreateTimer(1.0, GameplayStart_Stage, _, TIMER_REPEAT);
 	
 	GetConVarString(FindConVar("mp_gamemode"), gs_gamemode, sizeof(gs_gamemode));
 	
@@ -454,8 +465,6 @@ void GameplayStart(Handle timer)
 	}
 		
 	EventDisable(player_spawn);
-	
-	gt_GameplayStart = null;
 }
 
 Action GameplayStart_Stage(Handle timer)
@@ -466,7 +475,6 @@ Action GameplayStart_Stage(Handle timer)
 	{
 		gi_stage = 0;
 		
-		gt_GameplayStart_Stage = null;
 		return Plugin_Stop;
 	}
 	
@@ -479,15 +487,8 @@ Action GameplayStart_Stage(Handle timer)
 
 void Delete_Timers()
 {
-	if (gt_GameplayStart)
-	{
-		delete gt_GameplayStart;
-	}
-	
-	if (gt_GameplayStart_Stage)
-	{
-		delete gt_GameplayStart_Stage;
-	}
+	RTimerKill(gt_GameplayStart);
+	RTimerKill(gt_GameplayStart_Stage);
 }
 
 void EventEnable(EventName name)
