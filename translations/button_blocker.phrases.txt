@@ -9,25 +9,13 @@
 	"Message1"
 	{
 		"en"		"Wait for other players to come closer!"
+		"ru"		"Дождитесь пока остальные игроки подойдут ближе!"
+		"de"		"Warten Sie, bis andere Spieler näher kommen!"
 	}
 	"Message2"
 	{
 		"en"		"Get ready!"
-	}
-	"Message1"
-	{						  
-		"ru"		"Дождитесь пока остальные игроки подойдут ближе!"
-	}
-	"Message2"
-	{						  
 		"ru"		"Приготовьтесь!"
-	}
-	"Message1"
-	{						  
-		"de"		"Warten Sie, bis andere Spieler näher kommen!"
-	}
-	"Message2"
-	{						  
 		"de"		"Sich fertig machen!"
 	}
 }
