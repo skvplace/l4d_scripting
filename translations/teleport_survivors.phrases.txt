@@ -1,88 +1,55 @@
-//  = 0x01 (WHITE)
-//  = 0x02 (WHITE)
-//  = 0x03 (LIGHTGREEN)
-//  = 0x04 (YELLOW)
-//  = 0x05 (GREEN)
-
 "Phrases"
 {
 	"Countdown"
 	{
-		"en"		"Teleportation of stragglers after"
+		"en"			"Teleportation of stragglers in"
+		"ru"			"Перемещение отставших игроков через"
+		"de"			"Teleport der Nachzügler in"
 	}
 	"Teleport"
 	{
-		"en"		"Teleportation"
+		"en"			"Teleportation"
+		"ru"			"Перемещение"
+		"de"			"Teleport"
 	}
 	"Teleport Canceled"
 	{
-		"en"		"Teleportation Canceled"
+		"en"			"Teleportation Canceled"
+		"ru"			"Перемещение отменено"
+		"de"			"Teleportation abgebrochen"
 	}
 	"Not enough survivors"
 	{
-		"#format"	"{1:d}"
-		"en"		"To teleport the stragglers, need {1} survivors"
+		"#format"		"{1:d}"
+		"en"			"Need {1} survivors to teleport stragglers"
+		"ru"			"Чтобы переместить отставших, нужно {1} выживших."
+		"de"			"{1} Überlebende benötigt, um Nachzügler zu teleportieren"
 	}
 	"Infected"
 	{
-		"#format"	"{1:s}"
-		"en"		"{1} is interfering with teleportation"
+		"#format"		"{1:s}"
+		"en"			"{1} blocks teleportation!"
+		"ru"			"Перемещение блокирует {1}!"
+		"de"			"{1} blockiert den Teleport!"
 	}
 	"Safedoor"
 	{
-		"en"		"A blocked door is preventing teleportation"
+		"en"			"Locked door blocks teleportation!"
+		"ru"			"Перемещению мешает заблокированная дверь!"
+		"de"			"Verschlossene Tür blockiert den Teleport!"
 	}
-	"Countdown"
+	"Vehicle Countdown"
 	{
-		"ru"		"Телепортация отставших игроков через"
+		"en"			"Hurry! Rescue vehicle departing in"
+		"ru"			"Спешите! Спасательный транспорт отправится через"
+		"de"			"Beeilung! Rettungsfahrzeug fährt ab in"
 	}
-	"Teleport"
+	"Admin wait"
 	{
-		"ru"		"Перемещение"
-	}
-	"Teleport Canceled"
-	{
-		"ru"		"Перемещение отменено"
-	}
-	"Not enough survivors"
-	{
-		"#format"	"{1:d}"
-		"ru"		"Чтобы телепортировать отставших, нужно {1} выживших."
-	}
-	"Infected"
-	{
-		"#format"	"{1:s}"
-		"ru"		"Телепортации мешает {1}"
-	}
-	"Safedoor"
-	{
-		"ru"		"Телепортации мешает заблокированная дверь"
-	}
-	"Countdown"
-	{
-		"de"		"Teleportation der Nachzügler nach"
-	}
-	"Teleport"
-	{
-		"de"		"Teleportation"
-	}
-	"Teleport Canceled"
-	{
-		"de"		"Teleportation abgebrochen"
-	}
-	"Not enough survivors"
-	{
-		"#format"	"{1:d}"
-		"de"		"Um die Nachzügler zu teleportieren, werden {1} Überlebende benötigt."
-	}
-	"Infected"
-	{
-		"#format"	"{1:s}"
-		"de"		"{1} stört die Teleportation"
-	}
-	"Safedoor"
-	{
-		"de"		"Eine blockierte Tür verhindert die Teleportation"
+		"#format"		"{1:s}"
+		"en"			"Waiting for {1} to teleport stragglers"
+		"ru"			"Чтобы переместить отставших, нужно ждать {1}"
+		"de"			"Warte auf {1}, um Nachzügler zu teleportieren"
 	}
 }
 
