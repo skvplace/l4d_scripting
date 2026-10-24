@@ -24,7 +24,7 @@ public Plugin myinfo =
 	name 		= "[L4D/L4D2] Button Blocker",
 	author 		= "Skv",
 	description = "Blocking objects that trigger a panic event",
-	version 	= "1.7",
+	version 	= "1.8",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2846695#post2846695"
 }
 
