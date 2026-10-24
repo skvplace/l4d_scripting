@@ -946,12 +946,20 @@ bool IsAllSurvivorNear(int entity)
 		flDistanceLock = float(iDist);
 	}
 	
+	int iAdmin;
 	int iAdminNear;
+	int iAdminFlags;
 	
 	for (int i = 1; i <= MaxClients; i++)
 	{
 		if (IsValidClientTeam2Alive(i))
 		{
+			iAdminFlags = GetUserFlagBits(i);
+			if (iAdminFlags)
+			{
+				iAdmin ++;
+			}
+			
 			if (bPercentUnLockBot && IsFakeClient(i) || !IsFakeClient(i))
 			{
 				iAlive ++;
@@ -961,7 +969,7 @@ bool IsAllSurvivorNear(int entity)
 				{
 					iNear ++;
 					
-					if (GetUserFlagBits(i))
+					if (iAdminFlags)
 					{
 						iAdminNear ++;
 					}
@@ -970,14 +978,17 @@ bool IsAllSurvivorNear(int entity)
 		}
 	}
 	
-	if (GetConVarBool(g_cAdminWait) && !iAdminNear)
+	if (iAdmin)
 	{
-		return false;
-	}
-	
-	if (GetConVarBool(g_cAdminUnlock) && iAdminNear)
-	{
-		return true;
+		if (GetConVarBool(g_cAdminWait) && !iAdminNear)
+		{
+			return false;
+		}
+		
+		if (GetConVarBool(g_cAdminUnlock) && iAdminNear)
+		{
+			return true;
+		}
 	}
 	
 	int iPercent = RoundFloat(float(iNear) / float(iAlive) * 100.0);
