@@ -16,13 +16,13 @@
 
 #endif 
 
-#define RTIMERS_VERSION 				"1.9.6"
+#define RTIMERS_VERSION 				"2.0"
 #define TIMER_FLAG_NO_ROUNDCHANGE   	(1<<10)	/* < Timer will not carry over round */
 
 /**
  * Any of the following prototypes will work for a timed function.
  */
-typeset RTimer
+typeset RTimerCallback
 {
 	/**
 	 * Called when the timer interval has elapsed.
@@ -65,8 +65,213 @@ typeset RTimer
 	function void(Handle timer);
 };
 
+methodmap RTimer
+{
+	public RTimer(Handle timer) 
+	{
+		return view_as<RTimer>(timer);
+	}
+	
+	/**
+	 * Creates a round timer. Calling CloseHandle() or delete or RTimerKill on a timer will end the timer.
+	 *
+	 * @param interval      Timer interval in seconds.
+	 * @param func          Function to execute once the given interval has elapsed.
+	 * @param value         Any value (int or float) passed when creating the timer. 
+	 *                      If a handle is passed, it must be deleted in the callback
+	 *                      function or the TIMER_DATA_HNDL_CLOSE flag must be specified.
+	 * @param flags         Timer flags.
+	 *
+	 * @return              Handle to the timer object. You do not need to call CloseHandle(). 
+	 *                      If the timer could  not be created, INVALID_HANDLE will be returned.
+	 *
+	 * @error               Attempt to create a timer outside of a round.
+	*/
+	public static Handle Create(float interval, RTimerCallback func, any value = 0, int flags = 0)
+	{
+		return RTimerCreate(interval, func, value, flags);
+	}
+	
+	/**
+	 * Creates a round timer associated with a new datapack, and returns the datapack.
+	 * The datapack is automatically freed when the timer ends.
+     * The position of the datapack is not reset or changed for the timer function.
+	 *
+	 * @param interval      Timer interval in seconds.
+	 * @param func          Function to execute once the given interval has elapsed.
+	 * @param datapack      DataPack passed when creating the timer, 
+	 *                      you do not need to call CloseHandle().
+	 * @param flags         Timer flags.
+	 *
+	 * @return              Handle to the timer object. You do not need to call CloseHandle(). 
+	 *                      If the timer could  not be created, INVALID_HANDLE will be returned.
+	 *
+	 * @error               Attempt to create a timer outside of a round.
+	*/
+	public static Handle DataCreate(float interval, RTimerCallback func, DataPack &datapack, int flags = 0)
+	{
+		return RTimerDataCreate(interval, func, datapack, flags);
+	}
+	
+	/**
+	 * Checks if the timer is valid
+	*/
+	property bool IsValid 
+	{
+		public get()
+		{
+			return RTimerIsValid(view_as<Handle>(this));
+		}
+	}
+	
+	/**
+	 * Starts the timer manually to call the corresponding function 
+	 * and sets it to NULL if the TIMER_REPEAT flag is missing 
+	 * or the timed function returned Plugin_Stop.
+	 *
+	 * @param timer         Handle to the timer object.
+	 * @param reset         If reset is true, the elapsed time counter is reset
+	 *                      so the full interval must pass again.
+	*/
+	public static bool Trigger(Handle &timer, bool reset = false)
+	{
+		return RTimerTrigger(timer, reset);
+	}
+	
+	/**
+	 * Removes the timer.
+	 *
+	 * @param timer         Timer Handle to kill.
+	 * @param autoClose     If autoClose is true, the data that was passed to CreateTimer() will 
+	 *                      be closed as a handle if TIMER_DATA_HNDL_CLOSE was not specified.
+	 *
+	 * @error               Invalid timer handle or invalid data handle.
+	*/
+	public static bool Kill(Handle &timer, bool autoClose = false)
+	{
+		return RTimerKill(timer, autoClose);
+	}
+	
+	/**
+	 * Pauses the timer.
+	 *
+	 * @param pause         1 and the timer is paused and 0 is unpaused.
+	*/
+	public bool Pause(int pause)
+	{
+		return RTimerPause(view_as<Handle>(this), pause);
+	}
+	
+	/**
+	 * Returns the remaining time, or 0 if unsuccessful.
+	*/
+	public float GetRemaining()
+	{
+		return RTimerGetRemaining(view_as<Handle>(this));
+	}
+	
+	/**
+	 * Returns the game time the timer was created, or 0 if unsuccessful.
+	*/
+	public float Time()
+	{
+		return RTimerGetTime(view_as<Handle>(this));
+	}
+	
+	/**
+	 * Returns the timer interval, or 0 if unsuccessful.
+	*/
+	public float GetInterval()
+	{
+		return RTimerGetInterval(view_as<Handle>(this));
+	}
+	
+	/**
+	 * Sets a new timer interval.
+	 *
+	 * @param interval      Interval in seconds.
+	 * 
+	 * @error               The new interval cannot be a negative number. 
+	*/
+	public bool SetInterval(float interval)
+	{
+		return RTimerSetInterval(view_as<Handle>(this), interval);
+	}
+	
+	/**
+	 * Returns the timer flags, or -1 if unsuccessful.
+	*/
+	public int GetFlags()
+	{
+		return RTimerGetFlags(view_as<Handle>(this));
+	}
+	
+	/**
+	 * Sets the timer flags.
+	 *
+	 * @param flags         Flags.
+	*/
+	public bool SetFlags(int flags)
+	{
+		return RTimerSetFlags(view_as<Handle>(this), flags);
+	}
+	
+	/**
+	 * Returns the value passed to the timer callback function, or 0 if unsuccessful.
+	*/
+	public any GetValue()
+	{
+		return RTimerGetValue(view_as<Handle>(this));
+	}
+	
+	/**
+	 * Sets a new timer value.
+	 *
+	 * @param value         Any value.
+	*/
+	public bool SetValue(any value)
+	{
+		return RTimerSetValue(view_as<Handle>(this), value);
+	}
+	
+	/**
+	 * Adds a timer interval (for repeating timers, until the next expiration).
+	 *
+	 * @param seconds       Number of seconds.
+	 * 
+	 * @error               The added value is less than 0.
+	*/
+	public bool AddInterval(float interval)
+	{
+		return RTimerAddInterval(view_as<Handle>(this), interval);
+	}
+	
+	/**
+	 * Decrements the timer interval (for repeating timers, until the next expiration), 
+	 * if the received interval is less than 0, the timer fires.
+	 *
+	 * @param seconds       Number of seconds.
+	 * 
+	 * @error               The subtrahend value is less than 0.
+	*/
+	public bool SubInterval(float interval)
+	{
+		return RTimerSubInterval(view_as<Handle>(this), interval);
+	}
+	
+	/**
+	 * Shift the timer's expiration
+	 *
+	 * @param seconds       Number of seconds.
+	*/
+	public bool Shift(float interval)
+	{
+		return RTimerShift(view_as<Handle>(this), interval);
+	}
+}
+
 /**
- * Creates a round timer.  Calling CloseHandle() on a timer will end the timer.
+ * Creates a round timer. Calling CloseHandle() or delete or RTimerKill on a timer will end the timer.
  *
  * @param interval      Timer interval in seconds.
  * @param func          Function to execute once the given interval has elapsed.
@@ -81,7 +286,7 @@ typeset RTimer
  * @error               Attempt to create a timer outside of a round.
 */
 
-stock Handle RTimerCreate(float interval, RTimer func, any value = 0, int flags = 0)
+stock Handle RTimerCreate(float interval, RTimerCallback func, any value = 0, int flags = 0)
 {
 	Handle timer = CreateDataPack();
 	if (CreateRTimer(interval, func, value, flags, RTimerClose, timer, GetMyHandle()))
@@ -101,6 +306,8 @@ stock Handle RTimerCreate(float interval, RTimer func, any value = 0, int flags 
 
 /**
  * Creates a round timer associated with a new datapack, and returns the datapack.
+ * The datapack is automatically freed when the timer ends.
+ * The position of the datapack is not reset or changed for the timer function.
  *
  * @param interval      Timer interval in seconds.
  * @param func          Function to execute once the given interval has elapsed.
@@ -113,7 +320,7 @@ stock Handle RTimerCreate(float interval, RTimer func, any value = 0, int flags 
  *
  * @error               Attempt to create a timer outside of a round.
 */
-stock Handle RTimerDataCreate(float interval, RTimer func, Handle &datapack, int flags = 0)
+stock Handle RTimerDataCreate(float interval, RTimerCallback func, DataPack &datapack, int flags = 0)
 {
 	datapack = CreateDataPack();
 	flags |= TIMER_DATA_HNDL_CLOSE;
@@ -161,7 +368,8 @@ stock bool RTimerTrigger(Handle &timer, bool reset = false)
  * Removes the timer.
  *
  * @param timer         Timer Handle to kill.
- * @param autoClose     If autoClose is true, the data that was passed to CreateTimer() will be closed.
+ * @param autoClose     If autoClose is true, the data that was passed to CreateTimer() will 
+ *                      be closed as a handle if TIMER_DATA_HNDL_CLOSE was not specified.
  *
  * @error               Invalid timer handle or invalid data handle.
 */
@@ -232,12 +440,12 @@ native bool RTimerSetInterval(Handle timer, float interval);
 native int RTimerGetFlags(Handle timer); 
 
 /**
- * Returns the timer flags, or -1 if unsuccessful.
+ * Sets the timer flags.
  *
  * @param timer         Handle to the timer object.
- * @param value         Flags.
+ * @param flags         Flags.
 */
-native int RTimerSetFlags(Handle timer, int flags);
+native bool RTimerSetFlags(Handle timer, int flags);
 
 /**
  * Returns the value passed to the timer callback function, or 0 if unsuccessful.
@@ -314,7 +522,7 @@ native bool RTimerShift(Handle timer, float seconds);
  *
  * @error               Attempt to create a timer outside of a round.
 */
-native bool CreateRTimer(float interval, RTimer func, any value = 0, int flags = 0, Function func_close, Handle timer, Handle plugin);
+native bool CreateRTimer(float interval, RTimerCallback func, any value = 0, int flags = 0, Function func_close, Handle timer, Handle plugin);
 
 /**
  * Removes the timer.
@@ -341,7 +549,7 @@ native bool RTimerValueSet(Handle timer, any value);
  *
  * @error               Invalid timer handle or invalid data handle.
 */
-void RTimerClose(Handle timer, any data, int flags = 0)
+void RTimerClose(Handle timer, any data, int flags)
 {
 	if (timer != null)
 	{
