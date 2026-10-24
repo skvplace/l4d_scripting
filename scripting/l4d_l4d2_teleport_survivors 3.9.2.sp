@@ -24,7 +24,7 @@ public Plugin myinfo =
 	name 		= "[L4D] Teleport survivors",
 	author 		= "Skv",
 	description = "Teleports belated survivors to elevators, shelters, and rescue vehicles",
-	version 	= "3.9.1",
+	version 	= "3.9.2",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2841063#post2841063"
 }
 
@@ -1154,6 +1154,8 @@ int IsSurvivorsGathered(int trigger)
 	int people;
 	int people_inside;
 	
+	int admin;
+	int admin_flags;
 	int admin_inside;
 	int admin_outside;
 	
@@ -1161,6 +1163,12 @@ int IsSurvivorsGathered(int trigger)
 	{
 		if (IsValidClientTeleport(client))
 		{
+			admin_flags = GetUserFlagBits(client);
+			if (admin_flags)
+			{
+				admin ++;
+			}
+			
 			if (bot && IsFakeClient(client) || !IsFakeClient(client))
 			{
 				people ++;
@@ -1169,14 +1177,14 @@ int IsSurvivorsGathered(int trigger)
 				{
 					people_inside ++;
 					
-					if (GetUserFlagBits(client))
+					if (admin_flags)
 					{
 						admin_inside ++;
 					}
 				}
 				else
 				{
-					if (GetUserFlagBits(client))
+					if (admin_flags)
 					{
 						admin_outside = client;
 					}
@@ -1194,18 +1202,21 @@ int IsSurvivorsGathered(int trigger)
 	
 	int percent = RoundFloat(float(people_inside) / float(people) * 100.0);
 	
-	if (GetConVarBool(gc_teleport_admin_inside) && admin_inside)
+	if (admin)
 	{
-		percent = 100;
-	}
-	
-	if (GetConVarBool(gc_teleport_admin_wait) && admin_outside)
-	{
-		percent = 1;
-	}
-	else
-	{
-		admin_outside = 0;
+		if (GetConVarBool(gc_teleport_admin_inside) && admin_inside)
+		{
+			percent = 100;
+		}
+		
+		if (GetConVarBool(gc_teleport_admin_wait) && admin_outside)
+		{
+			percent = 1;
+		}
+		else
+		{
+			admin_outside = 0;
+		}
 	}
 		
 	gi_gather_percent 	= percent;
