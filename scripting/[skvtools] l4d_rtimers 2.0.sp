@@ -22,7 +22,7 @@ public Plugin myinfo =
 	name 		= "[skvtools] l4d_rtimers",
 	author 		= "Skv",
 	description = "Creates and manages timers that are active only during round",
-	version 	= "1.9.7",
+	version 	= "2.0",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2842880#post2842880"
 }
 
