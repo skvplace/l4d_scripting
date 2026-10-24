@@ -8,7 +8,7 @@ Params:
                             function or the TIMER_DATA_HNDL_CLOSE flag must be specified.
     flags                   Timer flags.
 Notes:
-    Creates a round timer.  Calling CloseHandle() on a timer will end the timer.
+    Creates a round timer.  Calling CloseHandle() or delete or RTimerKill on a timer will end the timer.
 Return:
     Handle to the timer object.  You do not need to call CloseHandle().
     If the timer could not be created, INVALID_HANDLE will be returned.
@@ -16,7 +16,7 @@ Error:
     Attempt to create a timer outside of a round.
 ">
                 <Param name="float interval"/>
-                <Param name="Timer func"/>
+                <Param name="RTimerCallback func"/>
                 <Param name="any data=INVALID_HANDLE"/>
                 <Param name="int flags=0"/>
             </Overload>
@@ -40,8 +40,8 @@ Error:
     Attempt to create a timer outside of a round.
 ">
                 <Param name="float interval"/>
-                <Param name="Timer func"/>
-                <Param name="Handle &amp;datapack"/>
+                <Param name="RTimerCallback func"/>
+                <Param name="DataPack &datapack"/>
                 <Param name="int flags=0"/>
             </Overload>
         </KeyWord>
@@ -68,7 +68,7 @@ Notes:
     and sets it to NULL if the TIMER_REPEAT flag is missing
     or the timed function returned Plugin_Stop.
 ">
-                <Param name="Handle timer"
+                <Param name="Handle &timer"
                 <Param name="bool reset=false"/>
             </Overload>
         </KeyWord>
@@ -80,8 +80,10 @@ Params:
                             be closed as a handle if TIMER_DATA_HNDL_CLOSE was not specified.
 Notes:
     Kills a timer.  Use this instead of CloseHandle() if you need more options.
+Error:
+    Invalid timer handle or invalid data handle.
 ">
-                <Param name="Handle timer"/>
+                <Param name="Handle &timer"/>
                 <Param name="bool autoClose=false"/>
             </Overload>
         </KeyWord>
@@ -133,7 +135,7 @@ Params:
     timer                   Handle to the timer object.
     interval                Interval in seconds.
 Notes:
-    Pauses the timer.
+    Sets a new timer interval.
 Error:
     The new interval cannot be a negative number.
 ">
@@ -155,12 +157,12 @@ Notes:
             <Overload retVal="native int" descr="
 Params:
     timer                   Handle to the timer object.
-	value                   Flags.
+	flags                   Flags.
 Notes:
-    Returns the timer flags, or -1 if unsuccessful
+    Sets the timer flags.
 ">
                 <Param name="Handle timer"/>
-				<Param name="int value"/>
+				<Param name="int flags"/>
             </Overload>
         </KeyWord>
         <KeyWord name="RTimerGetValue" func="yes">
