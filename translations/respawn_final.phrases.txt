@@ -9,13 +9,7 @@
 	"will_save"
 	{						  
 		"en"		"They will save you soon!"
-	}
-	"will_save"
-	{						  
 		"ru"		"Вас скоро спасут!"
-	}
-	"will_save"
-	{						  
 		"de"		"Sie werden dich bald retten!"
 	}
 }
