@@ -2455,6 +2455,19 @@ Action TeleportBotToRescue(Handle timer, int ref)
 	
 	TeleportEntity(bot, pos_entity);
 	
+	Handle event = CreateEvent("entity_visible");
+	if (event != null)
+	{ 
+		char name[MAX_NAME_LENGTH];
+		GetEntPropString(entity, Prop_Data, "m_iName", name, sizeof(name));
+		
+		SetEventString	(event, "entityname", name);
+		SetEventInt		(event, "userid", GetClientUserId(bot));
+		SetEventInt		(event, "subject", entity);
+				
+		FireEvent(event);
+	}
+
 	return Plugin_Stop;
 }
 
