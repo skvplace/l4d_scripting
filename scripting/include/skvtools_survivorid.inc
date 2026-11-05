@@ -9,52 +9,52 @@
 
 methodmap Survivor
 {
-	public Survivor(int survivorid) 
-	{
-		return view_as<Survivor>(survivorid);
-	}
+    public Survivor(int survivorid) 
+    {
+        return view_as<Survivor>(survivorid);
+    }
 
-	/**
-	* Returns client index if successful otherwise 0.
-	* (survivor.Client)
- */
-	property int Client 
-	{
-		public get() 
-		{
-			return GetClientOfSurvivorId(view_as<int>(this));
-		}
-	}
+    /**
+    * Returns client index if successful otherwise 0.
+    * (survivor.Client)
+    */
+    property int Client 
+    {
+        public get() 
+        {
+            return GetClientOfSurvivorId(view_as<int>(this));
+        }
+    }
 
-	/**
- * Returns user id  if successful otherwise 0.
-	* (survivor.UserId)
-	*/
-	property int UserId 
-	{
-		public get() 
-		{
-			return GetSurvivorUserId(view_as<int>(this));
-		}
-	}
+    /**
+    * Returns user id  if successful otherwise 0.
+    * (survivor.UserId)
+    */
+    property int UserId 
+    {
+        public get() 
+        {
+            return GetSurvivorUserId(view_as<int>(this));
+        }
+    }
 
-	/**
- * Returns survivor id if successful otherwise 0.
-	* Survivor.OfClient(client)
- */
-	public static Survivor OfClient(int client)
-	{
-		return view_as<Survivor>(GetClientSurvivorId(client));
-	}
+    /**
+    * Returns survivor id if successful otherwise 0.
+    * Survivor.OfClient(client)
+    */
+    public static Survivor OfClient(int client)
+    {
+        return view_as<Survivor>(GetClientSurvivorId(client));
+    }
 
-	/**
- * Returns survivor id if successful otherwise 0.
-	* Survivor.OfUserId(userid)
- */
-	public static Survivor OfUserId(int userid)
-	{
-		return view_as<Survivor>(GetSurvivorOfUserId(userid));
-	}
+    /**
+    * Returns survivor id if successful otherwise 0.
+    * Survivor.OfUserId(userid)
+    */
+    public static Survivor OfUserId(int userid)
+    {
+        return view_as<Survivor>(GetSurvivorOfUserId(userid));
+    }
 }
 
 /**
