@@ -20,7 +20,7 @@ public Plugin myinfo =
 	author 		= "Skv",
 	description = "Creates and manages survivorid - the survivor's identifier",
 	version 	= "1.7",
-	url 		= ""
+	url 		= "https://forums.alliedmods.net/showthread.php?p=2847142#post2847142"
 }
 
 int 	g_iUserId[MAX_SURVIVORID + 2];
@@ -88,16 +88,16 @@ void Event_player_team(Handle event, const char[] name, bool dontBroadcast)
 	
 	if (IsFakeClient(iClient))
 	{
-		char client_name[MAX_NAME_LENGTH];
-		FormatEx(client_name, sizeof(client_name), "%N", iClient);
+		char sName[MAX_NAME_LENGTH];
+		FormatEx(sName, sizeof(sName), "%N", iClient);
 		
-		if (StrContains(client_name, "smoker", false) > -1 ||
-			StrContains(client_name, "boomer", false) > -1 ||
-			StrContains(client_name, "hunter", false) > -1 ||
-			StrContains(client_name, "charger", false) > -1 ||
-			StrContains(client_name, "jockey", false) > -1 ||
-			StrContains(client_name, "spitter", false) > -1 ||
-			StrContains(client_name, "tank", false) > -1)
+		if (StrContains(sName, "smoker", 	false) > -1 ||
+			StrContains(sName, "boomer", 	false) > -1 ||
+			StrContains(sName, "hunter", 	false) > -1 ||
+			StrContains(sName, "charger", false) > -1 ||
+			StrContains(sName, "jockey", 	false) > -1 ||
+			StrContains(sName, "spitter", false) > -1 ||
+			StrContains(sName, "tank", 	false) > -1)
 		{
 			return;
 		}
