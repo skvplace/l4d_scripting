@@ -94,10 +94,10 @@ void Event_player_team(Handle event, const char[] name, bool dontBroadcast)
 		if (StrContains(sName, "smoker", 	false) > -1 ||
 			StrContains(sName, "boomer", 	false) > -1 ||
 			StrContains(sName, "hunter", 	false) > -1 ||
-			StrContains(sName, "charger", false) > -1 ||
+			StrContains(sName, "charger", 	false) > -1 ||
 			StrContains(sName, "jockey", 	false) > -1 ||
-			StrContains(sName, "spitter", false) > -1 ||
-			StrContains(sName, "tank", 	false) > -1)
+			StrContains(sName, "spitter", 	false) > -1 ||
+			StrContains(sName, "tank", 		false) > -1)
 		{
 			return;
 		}
