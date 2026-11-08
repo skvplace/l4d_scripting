@@ -1532,7 +1532,7 @@ void MovePos_Up(float vec_origin[3], float vec_angles[3], float distance)
 	vec_origin[2] = vec_origin[2] + direction[2] * distance;
 }
 
-stock int GetFreeTimerSlot()
+int GetFreeTimerSlot()
 {
 	for (int i = 1; i <= MAX_TIMERS; i++)
 	{
@@ -1546,7 +1546,7 @@ stock int GetFreeTimerSlot()
 	return 0;
 }
 
-stock void DeleteTimerSlot(Handle timer)
+void DeleteTimerSlot(Handle timer)
 {
 	for (int i = 1; i <= MAX_TIMERS; i++)
 	{
@@ -1558,7 +1558,7 @@ stock void DeleteTimerSlot(Handle timer)
 	}
 }
 
-stock void RemoveAllTimerSlots()
+void RemoveAllTimerSlots()
 {
 	for (int i = 1; i <= MAX_TIMERS; i++)
 	{
