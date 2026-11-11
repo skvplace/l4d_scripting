@@ -1077,12 +1077,35 @@ bool IsInArea(int client, int entity, float distance)
 	float 	vecOrigin[3];
 	GetEntityOrigin(entity, vecOrigin);
 	
-	if (GetVectorDistance(vecOrigin, vecEyepos) <= distance)
+	char sClassname[MAX_NAME_LENGTH];
+	GetEntityClassname(entity, sClassname, sizeof(sClassname));
+	
+	if (StrContains(sClassname, "trigger", false) == -1)
 	{
-		if (IsVisibleOrigin(vecEyepos, vecOrigin))
+		if (GetVectorDistance(vecOrigin, vecEyepos) <= distance)
 		{
-			return true;
+			if (IsVisibleOrigin(vecEyepos, vecOrigin))
+			{
+				return true;
+			}
 		}
+		
+		if (StrContains(sClassname, "func_button", false) > -1)
+		{
+			int iGlowEntity = GetEntPropEnt(entity, Prop_Send, "m_glowEntity");
+			if (IsEntityValid(iGlowEntity))
+			{
+				GetEntityOrigin(iGlowEntity, vecOrigin);
+															
+				if (GetVectorDistance(vecOrigin, vecEyepos) <= distance &&
+					IsSameFloor(vecOrigin[2], vecEyepos[2], 120.0)) // 120.0
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 		
 	float vecMins[3], vecMaxs[3];
