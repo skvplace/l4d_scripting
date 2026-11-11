@@ -24,7 +24,7 @@ public Plugin myinfo =
 	name 		= "[L4D/L4D2] Button Blocker",
 	author 		= "Skv",
 	description = "Blocking objects that trigger a panic event",
-	version 	= "1.9",
+	version 	= "1.9.1",
 	url 		= "https://forums.alliedmods.net/showthread.php?p=2846695#post2846695"
 }
 
@@ -1080,19 +1080,14 @@ bool IsInArea(int client, int entity, float distance)
 	char sClassname[MAX_NAME_LENGTH];
 	GetEntityClassname(entity, sClassname, sizeof(sClassname));
 	
-	if (StrContains(sClassname, "trigger", false) == -1)
+	if (GetVectorDistance(vecOrigin, vecEyepos) <= distance)
 	{
-		if (GetVectorDistance(vecOrigin, vecEyepos) <= distance)
+		if (IsVisibleOrigin(vecEyepos, vecOrigin))
 		{
-			if (IsVisibleOrigin(vecEyepos, vecOrigin))
-			{
-				return true;
-			}
+			return true;
 		}
-		
-		return false;
 	}
-	
+		
 	float vecMins[3], vecMaxs[3];
 	
 	GetEntPropVector(entity, Prop_Send, "m_vecMins", vecMins);
