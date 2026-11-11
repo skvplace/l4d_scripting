@@ -1699,7 +1699,7 @@ Action Teleport(Handle timer, int ref)
 		}
 		else
 		{
-			TeleportEntity(i, gv_pos_teleport);
+			TeleportClient(i, gv_pos_teleport);
 		}
 	}
 	
@@ -2292,7 +2292,7 @@ void TeleportSurvivorBot(int bot)
 	float pos_client[3];
 	GetTeleportOrigin(client, pos_client);
 		
-	TeleportEntity(bot, pos_client);
+	TeleportClient(bot, pos_client);
 }
 
 void GetTeleportOrigin(int client, float vec[3])
@@ -2518,7 +2518,7 @@ Action TeleportBotToRescue(Handle timer, int ref)
 	float pos_entity[3];
 	GetEntPropVector(entity, Prop_Data, "m_vecOrigin", pos_entity);
 	
-	TeleportEntity(bot, pos_entity);
+	TeleportClient(bot, pos_entity);
 	
 	Handle event = CreateEvent("entity_visible");
 	if (event != null)
@@ -2678,7 +2678,7 @@ void TeleportBotToSurvivor(Handle timer, int survivorid)
 	
 	if (!GetNearTank(client))
 	{
-		TeleportEntity(bot, pos_client);
+		TeleportClient(bot, pos_client);
 		
 		DataPack pack;
 		RTimerDataCreate(0.5, ForceFreeSurvivors, pack, TIMER_FLAG_NO_ROUNDCHANGE);
@@ -2740,7 +2740,7 @@ Action BotHelps(Handle timer, int survivorid)
 		
 		if (GetVectorDistance(pos_bot, pos_client) > gf_teleport_bot_threat_distance)
 		{
-			TeleportEntity(bot, pos_client);
+			TeleportClient(bot, pos_client);
 			
 			DataPack pack;
 			RTimerDataCreate(0.5, ForceFreeSurvivors, pack, TIMER_FLAG_NO_ROUNDCHANGE);
@@ -3059,6 +3059,25 @@ int GetNearTank(int client)
 	}
 		
 	return 0;
+}
+
+void TeleportClient(int client, float pos_teleport[3])
+{
+	SetEntPropFloat		(client, Prop_Send, "m_flFallVelocity", 0.0);
+	SetEntityMoveType	(client, MOVETYPE_CUSTOM);
+	
+	TeleportEntity		(client, pos_teleport);
+	
+	RTimerCreate(0.2, ForceClentMoveType, GetClientSurvivorId(client), TIMER_FLAG_NO_ROUNDCHANGE);
+}
+
+void ForceClentMoveType(Handle timer, int survivorid)
+{
+	int client = GetClientOfSurvivorId(survivorid);
+	if (IsValidClient(client))
+	{
+		SetEntityMoveType(client, MOVETYPE_WALK);
+	}
 }
 
 // #include <skvtools>
