@@ -1077,9 +1077,6 @@ bool IsInArea(int client, int entity, float distance)
 	float 	vecOrigin[3];
 	GetEntityOrigin(entity, vecOrigin);
 	
-	char sClassname[MAX_NAME_LENGTH];
-	GetEntityClassname(entity, sClassname, sizeof(sClassname));
-	
 	if (GetVectorDistance(vecOrigin, vecEyepos) <= distance)
 	{
 		if (IsVisibleOrigin(vecEyepos, vecOrigin))
