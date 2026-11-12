@@ -755,9 +755,6 @@ Action OnTrigger(Handle timer, int ref)
 		return Plugin_Stop;
 	}
 	
-	float vecOrigin[3];
-	GetEntityOrigin(iEntity, vecOrigin);
-	
 	char sClassname[MAX_NAME_LENGTH];
 	GetEntityClassname(iEntity, sClassname, sizeof(sClassname));
 	
@@ -1131,6 +1128,21 @@ bool IsInArea(int client, int entity, float distance)
 	
 	MovePos_Up(vecOrigin, vecAngles, vecMins[2] * 0.5);
 	if (IsInLevel(vecOrigin, vecEyepos, vecMaxs, vecMins, distance))
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool IsSameFloor(float z1, float z2, float floor_heigh)
+{
+	float glZfloor;
+	
+	glZfloor = z1 - z2;
+	if (glZfloor < 0) {glZfloor *= -1;}
+						
+	if (glZfloor <= floor_heigh)
 	{
 		return true;
 	}
@@ -1557,7 +1569,6 @@ int GetFreeTimerSlot()
 		}
 	}
 	
-	LogError("GetFreeTimerSlot: no free slots!");
 	return 0;
 }
 
