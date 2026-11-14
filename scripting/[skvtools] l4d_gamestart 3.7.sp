@@ -22,33 +22,33 @@ public Plugin myinfo =
 	name 		= "[skvtools] l4d_gamestart",
 	author 		= "Skv",
 	description = "Сreates a global forwards",
-	version 	= "3.6",
+	version 	= "3.7",
 	url 		= ""
 }
 
 #define 		MAX_STAGE 					18
 
-int 			gi_stage;
+int 			g_iStage;
 
-bool 			gb_new_game;
-bool 			gb_gameplay;
-bool 			gb_server_empty;
+bool 			g_bNewGame;
+bool 			g_bGamePlay;
+bool 			g_bServerEmpty;
 
-char 			gs_gamemode					[MAX_NAME_LENGTH];
+char 			g_sGameMode					[MAX_NAME_LENGTH];
 
-Handle 			gt_GameplayStart;
-Handle 			gt_GameplayStart_Stage;
+Handle 			g_tGameplayStart;
+Handle 			g_tGameplayStage;
 
-GlobalForward 	gF_OnGameplayStart;
-GlobalForward 	gF_OnMapRestart;
-GlobalForward 	gF_OnMapTransit;
-GlobalForward 	gF_OnMissionChange;
-GlobalForward 	gF_OnMissionLost;
-GlobalForward 	gF_OnRoundEnd;
-GlobalForward 	gF_OnServerEmpty;
-GlobalForward 	gF_OnEscapeVehicleLeaving;
+GlobalForward 	g_fwOnGameplayStart;
+GlobalForward 	g_fwOnMapRestart;
+GlobalForward 	g_fwOnMapTransit;
+GlobalForward 	g_fwOnMissionChange;
+GlobalForward 	g_fwOnMissionLost;
+GlobalForward 	g_fwOnRoundEnd;
+GlobalForward 	g_fwOnServerEmpty;
+GlobalForward 	g_fwOnEscapeVehicleLeaving;
 
-ConVar 			gc_server_console;
+ConVar 			g_cServerConsole;
 
 enum 			EventName
 {
@@ -57,8 +57,8 @@ enum 			EventName
 				round_end
 };
 
-bool 			gb_eventhook[3];
-int 			gi_users					[MAXPLAYERS + 1];
+bool 			g_bEventHook[3];
+int 			g_iUserId					[MAXPLAYERS + 1];
 
 public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max)
 {
@@ -70,58 +70,58 @@ public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max
 	
 	RegPluginLibrary("[skvtools] l4d_gamestart");
 	
-	CreateNative("IsGameplayActive", native_IsGameplayActive);
-	CreateNative("IsServerEmpty", native_IsServerEmpty);
+	CreateNative("IsGameplayActive", 	native_IsGameplayActive);
+	CreateNative("IsServerEmpty", 		native_IsServerEmpty);
 	
 	return APLRes_Success;
 }
 
 any native_IsGameplayActive(Handle plugin, int numParams)
 {
-	return gb_gameplay;
+	return g_bGamePlay;
 }
 
 any native_IsServerEmpty(Handle plugin, int numParams)
 {
-	return gb_server_empty;
+	return g_bServerEmpty;
 }
 
 public void OnPluginStart()
 {
-	HookEvent("player_connect", 		Event_player_connect, 		EventHookMode_Pre);
-	HookEvent("player_disconnect", 		Event_player_disconnect, 	EventHookMode_Pre);
-	HookEvent("player_team", 			Event_player_team, 			EventHookMode_Pre);
+	HookEvent("player_connect", 		Event_player_connect, 			EventHookMode_Pre);
+	HookEvent("player_disconnect", 		Event_player_disconnect, 		EventHookMode_Pre);
+	HookEvent("player_team", 			Event_player_team, 				EventHookMode_Pre);
 	
 	HookEvent("vote_passed", 			Event_vote_passed);
 	HookEvent("map_transition", 		Event_map_transition);
 	HookEvent("finale_win", 			Event_finale_win);
 	
-	HookEvent("finale_vehicle_leaving", Event_finale_vehicle_leaving, EventHookMode_Pre);
+	HookEvent("finale_vehicle_leaving", Event_finale_vehicle_leaving, 	EventHookMode_Pre);
 	
-	GetConVarString(FindConVar("mp_gamemode"), gs_gamemode, sizeof(gs_gamemode));
+	GetConVarString(FindConVar("mp_gamemode"), g_sGameMode, sizeof(g_sGameMode));
 	
-	gF_OnGameplayStart 			= CreateGlobalForward("OnGameplayStart", 		ET_Ignore, Param_Cell);
-	gF_OnMapRestart 			= CreateGlobalForward("OnMapRestart", 			ET_Ignore);
-	gF_OnMapTransit 			= CreateGlobalForward("OnMapTransit", 			ET_Ignore);
-	gF_OnMissionChange 			= CreateGlobalForward("OnMissionChange", 		ET_Ignore);
-	gF_OnMissionLost 			= CreateGlobalForward("OnMissionLost", 			ET_Ignore);
-	gF_OnRoundEnd 				= CreateGlobalForward("OnRoundEnd", 			ET_Ignore);
-	gF_OnServerEmpty 			= CreateGlobalForward("OnServerEmpty", 			ET_Ignore);
-	gF_OnEscapeVehicleLeaving 	= CreateGlobalForward("OnEscapeVehicleLeaving", ET_Ignore);
+	g_fwOnGameplayStart 		= CreateGlobalForward("OnGameplayStart", 		ET_Ignore, Param_Cell);
+	g_fwOnMapRestart 			= CreateGlobalForward("OnMapRestart", 			ET_Ignore);
+	g_fwOnMapTransit 			= CreateGlobalForward("OnMapTransit", 			ET_Ignore);
+	g_fwOnMissionChange 		= CreateGlobalForward("OnMissionChange", 		ET_Ignore);
+	g_fwOnMissionLost 			= CreateGlobalForward("OnMissionLost", 			ET_Ignore);
+	g_fwOnRoundEnd 				= CreateGlobalForward("OnRoundEnd", 			ET_Ignore);
+	g_fwOnServerEmpty 			= CreateGlobalForward("OnServerEmpty", 			ET_Ignore);
+	g_fwOnEscapeVehicleLeaving 	= CreateGlobalForward("OnEscapeVehicleLeaving", ET_Ignore);
 	
-	gc_server_console = CreateConVar("gamestart_server_console", "1", "Output messages to server console?", _, true, 0.0, true, 1.0);
+	g_cServerConsole = CreateConVar("gamestart_server_console", "1", "Output messages to server console?", _, true, 0.0, true, 1.0);
 	
-	SetConVarFlags(gc_server_console, GetConVarFlags(gc_server_console) & ~FCVAR_NOTIFY);
+	SetConVarFlags(g_cServerConsole, GetConVarFlags(g_cServerConsole) & ~FCVAR_NOTIFY);
 	
 	AutoExecConfig(true, "l4d_gamestart");
 }
 
 public void OnMapStart()
 {
-	gb_new_game = false;
-	gb_gameplay = false;
+	g_bNewGame = false;
+	g_bGamePlay = false;
 	
-	if (!gb_server_empty)
+	if (!g_bServerEmpty)
 	{
 		EventEnable(player_spawn);
 	}
@@ -129,8 +129,8 @@ public void OnMapStart()
 
 public void OnMapEnd()
 {
-	gb_new_game = false;
-	gb_gameplay = false;
+	g_bNewGame = false;
+	g_bGamePlay = false;
 }
 
 public void OnClientPostAdminCheck(int client)
@@ -140,15 +140,15 @@ public void OnClientPostAdminCheck(int client)
 		return;
 	}
 	
-	gb_server_empty = false;
+	g_bServerEmpty = false;
 	
-	bool first = true;
+	bool bFirst = true;
 	
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		if (gi_users[i])
+		if (g_iUserId[i])
 		{
-			first = false;
+			bFirst = false;
 		}
 	}
 	
@@ -157,12 +157,12 @@ public void OnClientPostAdminCheck(int client)
 		return;
 	}
 	
-	if (!first)
+	if (!bFirst)
 	{
 		return;
 	}
 	
-	PrintToServerPlugin("FirstClientConnected");
+	ServerConsole("FirstClientConnected");
 		
 	Delete_Timers();
 	
@@ -171,21 +171,21 @@ public void OnClientPostAdminCheck(int client)
 
 void Event_player_connect(Handle event, const char [] name, bool dontBroadcast)
 {
-	int bot = GetEventInt(event, "bot");
-	if (bot)
+	int iBot = GetEventInt(event, "bot");
+	if (iBot)
 	{
 		return;
 	}
 	
-	gb_server_empty = false;
+	g_bServerEmpty = false;
 	
-	bool first = true;
+	bool bFirst = true;
 	
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		if (gi_users[i])
+		if (g_iUserId[i])
 		{
-			first = false;
+			bFirst = false;
 		}
 	}
 	
@@ -194,12 +194,12 @@ void Event_player_connect(Handle event, const char [] name, bool dontBroadcast)
 		return;
 	}
 	
-	if (!first)
+	if (!bFirst)
 	{
 		return;
 	}
 	
-	PrintToServerPlugin("FirstClientConnected");
+	ServerConsole("FirstClientConnected");
 		
 	Delete_Timers();
 	
@@ -215,13 +215,13 @@ void Event_player_disconnect(Handle event, const char [] name, bool dontBroadcas
 	
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		if (gi_users[i])
+		if (g_iUserId[i])
 		{
 			return;
 		}
 	}
 	
-	if (gb_server_empty)
+	if (g_bServerEmpty)
 	{
 		return;
 	}
@@ -231,8 +231,8 @@ void Event_player_disconnect(Handle event, const char [] name, bool dontBroadcas
 
 void Event_player_team(Handle event, const char [] name, bool dontBroadcast)
 {
-	int client = GetClientOfUserId(GetEventInt(event, "userid"));
-	if (IsFakeClient(client)) {return;}
+	int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
+	if (IsFakeClient(iClient)) {return;}
 	
 	if (GetEventInt(event, "team") != 0)
 	{
@@ -246,13 +246,13 @@ void Event_player_team(Handle event, const char [] name, bool dontBroadcast)
 		
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		if (gi_users[i])
+		if (g_iUserId[i])
 		{
 			return;
 		}
 	}
 	
-	if (gb_server_empty)
+	if (g_bServerEmpty)
 	{
 		return;
 	}
@@ -262,9 +262,9 @@ void Event_player_team(Handle event, const char [] name, bool dontBroadcast)
 
 void SetServerEmpty()
 {	
-	gb_new_game 	= false;
-	gb_gameplay 	= false;
-	gb_server_empty = true;
+	g_bNewGame 		= false;
+	g_bGamePlay 	= false;
+	g_bServerEmpty 	= true;
 	
 	EventDisable(player_spawn);
 	EventDisable(mission_lost);
@@ -272,26 +272,26 @@ void SetServerEmpty()
 	
 	Delete_Timers();
 	
-	PrintToServerPlugin("OnServerEmpty");
+	ServerConsole("OnServerEmpty");
 	
-	Call_StartForward(gF_OnServerEmpty);
+	Call_StartForward(g_fwOnServerEmpty);
 	Call_Finish();
 }
 
 void Event_player_spawn(Handle event, const char [] name, bool dontBroadcast)
 {
-	int client = GetClientOfUserId(GetEventInt(event, "userid"));
-	if (!IsValidClient(client)) {return;}
-	if (GetClientTeam(client) != 2) {return;}
+	int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
+	if (!IsValidClient(iClient)) {return;}
+	if (GetClientTeam(iClient) != 2) {return;}
 	
-	gb_new_game = false;
-	gb_gameplay = true;
+	g_bNewGame 	= false;
+	g_bGamePlay = true;
 	
-	GetConVarString(FindConVar("mp_gamemode"), gs_gamemode, sizeof(gs_gamemode));
+	GetConVarString(FindConVar("mp_gamemode"), g_sGameMode, sizeof(g_sGameMode));
 	
-	if (!strcmp(gs_gamemode, "survival") ||
-		!strcmp(gs_gamemode, "versus") ||
-		!strcmp(gs_gamemode, "scavenge"))
+	if (!strcmp(g_sGameMode, "survival") ||
+		!strcmp(g_sGameMode, "versus") ||
+		!strcmp(g_sGameMode, "scavenge"))
 	{
 		EventEnable(round_end);
 	}
@@ -303,8 +303,8 @@ void Event_player_spawn(Handle event, const char [] name, bool dontBroadcast)
 	EventDisable(player_spawn);
 	Delete_Timers();
 		
-	gt_GameplayStart = RTimerCreate(0.1, GameplayStart);
-	if (!gt_GameplayStart)
+	g_tGameplayStart = RTimerCreate(0.1, GameplayStart);
+	if (!g_tGameplayStart)
 	{
 		LogError("\"%s: Timer not created\"", name);
 	}
@@ -312,33 +312,33 @@ void Event_player_spawn(Handle event, const char [] name, bool dontBroadcast)
 
 void Event_mission_lost(Handle event, const char [] name, bool dontBroadcast)
 {
-	gb_new_game = true;
-	gb_gameplay = false;
+	g_bNewGame 	= true;
+	g_bGamePlay = false;
 	
 	Delete_Timers();
 	
 	EventEnable(player_spawn);
 	EventDisable(mission_lost);
 	
-	PrintToServerPlugin("OnMissionLost");
+	ServerConsole("OnMissionLost");
 	
-	Call_StartForward(gF_OnMissionLost);
+	Call_StartForward(g_fwOnMissionLost);
 	Call_Finish();
 }
 
 void Event_round_end(Handle event, const char [] name, bool dontBroadcast)
 {
-	gb_new_game = true;
-	gb_gameplay = false;
+	g_bNewGame 	= true;
+	g_bGamePlay = false;
 	
 	Delete_Timers();
 	
 	EventEnable(player_spawn);
 	EventDisable(round_end);
 	
-	PrintToServerPlugin("OnRoundEnd");
+	ServerConsole("OnRoundEnd");
 	
-	Call_StartForward(gF_OnRoundEnd);
+	Call_StartForward(g_fwOnRoundEnd);
 	Call_Finish();
 }
 
@@ -352,28 +352,28 @@ public void OnEntityCreated(int entity,char [] classname)
 
 void Event_finale_vehicle_leaving(Handle event, const char [] name, bool dontBroadcast)
 {
-	PrintToServerPlugin("OnEscapeVehicleLeaving");
+	ServerConsole("OnEscapeVehicleLeaving");
 	
-	Call_StartForward(gF_OnEscapeVehicleLeaving);
+	Call_StartForward(g_fwOnEscapeVehicleLeaving);
 	Call_Finish();
 }
 
 void OnHook_logic_auto(char [] output, int caller, int activator, float delay)
 {
-	if (!gb_new_game)
+	if (!g_bNewGame)
 	{
 		return;
 	}
 	
-	gb_new_game = false;
-	gb_gameplay = true;
+	g_bNewGame 	= false;
+	g_bGamePlay = true;
 	
 	EventEnable(player_spawn);
 	
 	Delete_Timers();
 		
-	gt_GameplayStart = RTimerCreate(0.1, GameplayStart);
-	if (!gt_GameplayStart)
+	g_tGameplayStart = RTimerCreate(0.1, GameplayStart);
+	if (!g_tGameplayStart)
 	{
 		LogError("\"OnHook_logic_auto: Timer not created\"");
 	}
@@ -381,31 +381,31 @@ void OnHook_logic_auto(char [] output, int caller, int activator, float delay)
 
 void Event_vote_passed(Handle event, const char [] name, bool dontBroadcast)
 {
-	char vote_details[PLATFORM_MAX_PATH];
-	GetEventString(event, "details", vote_details, sizeof(vote_details));
+	char sVoteDetails[PLATFORM_MAX_PATH];
+	GetEventString(event, "details", sVoteDetails, sizeof(sVoteDetails));
 	
-	if (!strcmp(vote_details, "#L4D_vote_passed_restart_game"))
+	if (!strcmp(sVoteDetails, "#L4D_vote_passed_restart_game"))
 	{
 		Delete_Timers();
 		
-		gb_new_game = true;
-		gb_gameplay = false;
+		g_bNewGame 	= true;
+		g_bGamePlay = false;
 		
-		PrintToServerPlugin("OnMapRestart");
+		ServerConsole("OnMapRestart");
 		
-		Call_StartForward(gF_OnMapRestart);
+		Call_StartForward(g_fwOnMapRestart);
 		Call_Finish();
 	}
-	else if (!strcmp("#L4D_vote_passed_mission_change", vote_details)) 
+	else if (!strcmp(sVoteDetails, "#L4D_vote_passed_mission_change"))
 	{
 		Delete_Timers();
 		
-		gb_new_game = true;
-		gb_gameplay = false;
+		g_bNewGame 	= true;
+		g_bGamePlay = false;
 		
-		PrintToServerPlugin("OnMissionChange");
+		ServerConsole("OnMissionChange");
 		
-		Call_StartForward(gF_OnMissionChange);
+		Call_StartForward(g_fwOnMissionChange);
 		Call_Finish();
 	}
 }
@@ -414,12 +414,12 @@ void Event_map_transition(Handle event, const char [] name, bool dontBroadcast)
 {
 	Delete_Timers();
 	
-	gb_new_game = false;
-	gb_gameplay = false;
+	g_bNewGame 	= false;
+	g_bGamePlay = false;
 	
-	PrintToServerPlugin("OnMapTransit");
+	ServerConsole("OnMapTransit");
 	
-	Call_StartForward(gF_OnMapTransit);
+	Call_StartForward(g_fwOnMapTransit);
 	Call_Finish();
 }
 
@@ -427,35 +427,35 @@ void Event_finale_win(Handle event, const char [] name, bool dontBroadcast)
 {
 	Delete_Timers();
 	
-	gb_new_game = false;
-	gb_gameplay = false;
+	g_bNewGame 	= false;
+	g_bGamePlay = false;
 	
 	EventDisable(player_spawn);
 }
 
 void GameplayStart(Handle timer)
 {
-	PrintToServerPlugin("OnGameplayStart");
+	ServerConsole("OnGameplayStart");
 	
-	gi_stage = 0;
+	g_iStage = 0;
 	
-	Call_StartForward(gF_OnGameplayStart);
-	Call_PushCell(gi_stage);
+	Call_StartForward(g_fwOnGameplayStart);
+	Call_PushCell(g_iStage);
 	Call_Finish();
 	
-	RTimerKill(gt_GameplayStart_Stage);
-
-	gt_GameplayStart_Stage = RTimerCreate(1.0, GameplayStart_Stage, _, TIMER_REPEAT | TIMER_FLAG_NO_ROUNDCHANGE);
-	if (!gt_GameplayStart_Stage)
+	RTimerKill(g_tGameplayStage);
+	
+	g_tGameplayStage = RTimerCreate(1.0, GameplayStage, _, TIMER_REPEAT | TIMER_FLAG_NO_ROUNDCHANGE);
+	if (!g_tGameplayStage)
 	{
 		LogError("\"GameplayStart: Timer not created\"");
 	}
 	
-	GetConVarString(FindConVar("mp_gamemode"), gs_gamemode, sizeof(gs_gamemode));
+	GetConVarString(FindConVar("mp_gamemode"), g_sGameMode, sizeof(g_sGameMode));
 	
-	if (!strcmp(gs_gamemode, "survival") ||
-		!strcmp(gs_gamemode, "versus") ||
-		!strcmp(gs_gamemode, "scavenge"))
+	if (!strcmp(g_sGameMode, "survival") ||
+		!strcmp(g_sGameMode, "versus") ||
+		!strcmp(g_sGameMode, "scavenge"))
 	{
 		EventEnable(round_end);
 	}
@@ -467,19 +467,19 @@ void GameplayStart(Handle timer)
 	EventDisable(player_spawn);
 }
 
-Action GameplayStart_Stage(Handle timer)
+Action GameplayStage(Handle timer)
 {
-	gi_stage ++;
+	g_iStage ++;
 	
-	if (gi_stage > MAX_STAGE)
+	if (g_iStage > MAX_STAGE)
 	{
-		gi_stage = 0;
+		g_iStage = 0;
 		
 		return Plugin_Stop;
 	}
 	
-	Call_StartForward(gF_OnGameplayStart);
-	Call_PushCell(gi_stage);
+	Call_StartForward(g_fwOnGameplayStart);
+	Call_PushCell(g_iStage);
 	Call_Finish();
 	
 	return Plugin_Continue;
@@ -487,18 +487,18 @@ Action GameplayStart_Stage(Handle timer)
 
 void Delete_Timers()
 {
-	RTimerKill(gt_GameplayStart);
-	RTimerKill(gt_GameplayStart_Stage);
+	RTimerKill(g_tGameplayStart);
+	RTimerKill(g_tGameplayStage);
 }
 
 void EventEnable(EventName name)
 {
-	if (gb_eventhook[name])
+	if (g_bEventHook[name])
 	{
 		return;
 	}
 	
-	gb_eventhook[name] = true;
+	g_bEventHook[name] = true;
 	
 	switch(name)
 	{
@@ -519,12 +519,12 @@ void EventEnable(EventName name)
 
 void EventDisable(EventName name)
 {
-	if (!gb_eventhook[name])
+	if (!g_bEventHook[name])
 	{
 		return;
 	}
 	
-	gb_eventhook[name] = false;
+	g_bEventHook[name] = false;
 	
 	switch(name)
 	{
@@ -552,9 +552,9 @@ int SetUserConnect(int userid)
 	
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		if (!gi_users[i])
+		if (!g_iUserId[i])
 		{
-			gi_users[i] = userid;
+			g_iUserId[i] = userid;
 			
 			return i;
 		}
@@ -567,9 +567,9 @@ int SetUserDisconnect(int userid)
 {
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		if (gi_users[i] == userid)
+		if (g_iUserId[i] == userid)
 		{
-			gi_users[i] = 0;
+			g_iUserId[i] = 0;
 			
 			return i;
 		}
@@ -582,7 +582,7 @@ int GetUserSlot(int userid)
 {
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		if (gi_users[i] == userid)
+		if (g_iUserId[i] == userid)
 		{
 			return i;
 		}
@@ -591,12 +591,6 @@ int GetUserSlot(int userid)
 	return 0;
 }
 
-/**
- * Проверяет клиента команды 2
- *
- * client 		- Client index.
- * return 		- true если client valid и false если нет
-*/
 bool IsValidClient(int client)
 {
 	if (client > 0  && client <= MaxClients)
@@ -609,30 +603,12 @@ bool IsValidClient(int client)
 	return false;
 }
 
-/**
- * выводит в консоль сервера с названием плагина
- *
- * message 		- сообщение
- * any ... 		- параметры функции
-*/
-void PrintToServerPlugin(char [] message, any ...)
+void ServerConsole(char [] message)
 {
-	if (!GetConVarBool(gc_server_console))
+	if (!GetConVarBool(g_cServerConsole))
 	{
 		return;
 	}
 	
-	SetGlobalTransTarget(LANG_SERVER);
-	
-	int len = strlen(message) + PLATFORM_MAX_PATH;
-	char [] buffer = new char[len];
-	
-	char plugin_name[PLATFORM_MAX_PATH];
-	GetPluginFilename(INVALID_HANDLE, plugin_name, sizeof(plugin_name));
-	
-	VFormat(buffer, len, message, 2); // 2 - это номер параметра any
-	
-	Format(buffer, len, "%s: %s", plugin_name, buffer);
-	PrintToServer(buffer);
-
+	LogMessage(message);
 }
