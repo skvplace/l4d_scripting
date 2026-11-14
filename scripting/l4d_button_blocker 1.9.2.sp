@@ -1197,14 +1197,12 @@ bool IsInLevel(float vecOrigin[3], float vecEyepos[3], float vecMaxs[3], float v
 
 bool IsVisibleOrigin(float pos_start[3], float pos_end[3])
 {
-	Handle trace = TR_TraceRayFilterEx(pos_start, pos_end, MASK_VISIBLE, RayType_EndPoint, TraceFilter_Visible);
-	if (TR_DidHit(trace))
+	TR_TraceRayFilter(pos_start, pos_end, MASK_VISIBLE, RayType_EndPoint, TraceFilter_Visible);
+	if (TR_DidHit(null))
 	{
-		delete trace;
 		return false;
 	}
 	
-	delete trace;
 	return true;
 }
 
