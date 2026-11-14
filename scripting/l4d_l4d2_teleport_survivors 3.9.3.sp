@@ -637,15 +637,12 @@ bool IsVisibleOrigin(float pos_1[3], float pos_2[3], int entity)
 	
 	pos_end[2] += 30.0;
 	
-	Handle trace = TR_TraceRayFilterEx(pos_start, pos_end, MASK_VISIBLE, RayType_EndPoint, TraceFilter_VisibleSafeDoor, entity);
-	
-	if (TR_DidHit(trace))
+	TR_TraceRayFilter(pos_start, pos_end, MASK_VISIBLE, RayType_EndPoint, TraceFilter_VisibleSafeDoor, entity);
+	if (TR_DidHit(null))
 	{
-		delete trace;	
 		return false;
 	}
 	
-	delete trace;
 	return true;
 }
 
@@ -1086,12 +1083,11 @@ bool IsVisible(int client, int entity)
 	
 	MovePos_Forward(pos_start, ang_client, 5.0); // 10.0
 	*/
-	Handle trace = TR_TraceRayFilterEx(pos_start, pos_end, MASK_SOLID, RayType_EndPoint, TraceFilter_Visible);
-	if (TR_DidHit(trace))
+	TR_TraceRayFilter(pos_start, pos_end, MASK_SOLID, RayType_EndPoint, TraceFilter_Visible);
+	if (TR_DidHit(null))
 	{
-		int index = TR_GetEntityIndex(trace);
-		delete trace;
-		
+		int index = TR_GetEntityIndex(null);
+				
 		if (index == entity)
 		{
 			return true;
@@ -1100,7 +1096,6 @@ bool IsVisible(int client, int entity)
 		return false;
 	}
 	
-	delete trace;
 	return true;
 }
 
@@ -1748,11 +1743,10 @@ bool IsVisibleClient(int survivor, int client)
 	
 	MovePos_Forward(pos_end, ang_client, 10.0);
 	
-	Handle trace = TR_TraceRayFilterEx(pos_start, pos_end, MASK_VISIBLE, RayType_EndPoint, TraceFilter_VisibleClient);
-	if (TR_DidHit(trace))
+	TR_TraceRayFilter(pos_start, pos_end, MASK_VISIBLE, RayType_EndPoint, TraceFilter_VisibleClient);
+	if (TR_DidHit(null))
 	{
-		int index = TR_GetEntityIndex(trace);
-		delete trace;
+		int index = TR_GetEntityIndex(null);
 		
 		if (index == client)
 		{
@@ -1762,7 +1756,6 @@ bool IsVisibleClient(int survivor, int client)
 		return false;
 	}
 	
-	delete trace;
 	return true;
 }
 
@@ -2291,7 +2284,7 @@ void TeleportSurvivorBot(int bot)
 	
 	float pos_client[3];
 	GetTeleportOrigin(client, pos_client);
-		
+	
 	TeleportClient(bot, pos_client);
 }
 
@@ -2519,7 +2512,7 @@ Action TeleportBotToRescue(Handle timer, int ref)
 	GetEntPropVector(entity, Prop_Data, "m_vecOrigin", pos_entity);
 	
 	TeleportClient(bot, pos_entity);
-	
+		
 	Handle event = CreateEvent("entity_visible");
 	if (event != null)
 	{ 
@@ -2764,12 +2757,12 @@ void ForceFreeSurvivors(Handle timer, DataPack pack)
 	int victim 	= GetClientOfSurvivorId(ReadPackCell(pack));
 	int rescuer = GetClientOfSurvivorId(ReadPackCell(pack));
 	
-	if (!IsValidClientTeam2Alive(victim))
+	if (!IsValidClientTeam2Alive(rescuer))
 	{
 		return;
 	}
 	
-	if (!IsValidClientTeam2Alive(rescuer))
+	if (!IsValidClientTeam2Alive(victim))
 	{
 		return;
 	}
@@ -3063,12 +3056,13 @@ int GetNearTank(int client)
 
 void TeleportClient(int client, float pos_teleport[3])
 {
-	SetEntPropFloat		(client, Prop_Send, "m_flFallVelocity", 0.0);
-	SetEntityMoveType	(client, MOVETYPE_CUSTOM);
-	
-	TeleportEntity		(client, pos_teleport);
-	
+	SetEntPropFloat(client, Prop_Send, "m_flFallVelocity", 0.0);
+	SetEntityMoveType(client, MOVETYPE_CUSTOM);
+		
 	RTimerCreate(0.2, ForceClentMoveType, GetClientSurvivorId(client), TIMER_FLAG_NO_ROUNDCHANGE);
+	
+	float vec[3];
+	TeleportEntity(client, pos_teleport, vec, vec);
 }
 
 void ForceClentMoveType(Handle timer, int survivorid)
