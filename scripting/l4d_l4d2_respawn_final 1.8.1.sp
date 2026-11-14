@@ -2160,14 +2160,12 @@ bool IsVisibleOrigin(float pos1[3], float pos2[3])
 	float pos_end[3];
 	pos_end = pos2;
 	
-	Handle trace = TR_TraceRayFilterEx(pos_start, pos_end, MASK_SOLID, RayType_EndPoint, TraceFilter_Visible);
-	if (TR_DidHit(trace))
+	TR_TraceRayFilter(pos_start, pos_end, MASK_SOLID, RayType_EndPoint, TraceFilter_Visible);
+	if (TR_DidHit(null))
 	{
-		delete trace;
 		return false;
 	}
 	
-	delete trace;
 	return true;
 }
 
@@ -2229,22 +2227,19 @@ bool IsVisible(int client, int entity)
 	
 	MovePos_Forward(pos_end, ang_client, 10.0);
 	
-	Handle trace = TR_TraceRayFilterEx(pos_start, pos_end, MASK_SOLID, RayType_EndPoint, TraceFilter_Visible);
-	if (TR_DidHit(trace))
+	TR_TraceRayFilter(pos_start, pos_end, MASK_SOLID, RayType_EndPoint, TraceFilter_Visible);
+	if (TR_DidHit(null))
 	{
-		int index = TR_GetEntityIndex(trace);
+		int index = TR_GetEntityIndex(null);
 		
 		if (index == entity)
 		{
-			delete trace;
 			return true;
 		}
 		
-		delete trace;
 		return false;
 	}
 		
-	delete trace;
 	return true;
 }
 
