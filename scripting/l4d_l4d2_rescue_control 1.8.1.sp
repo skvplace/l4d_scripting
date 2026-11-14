@@ -1674,9 +1674,9 @@ bool Search_Recue_Rooms(int rescue)
 		
 	float buffer_pos[3];
 	TR_TraceRayFilter(pos_rescue, view_as<float>({-90.0, 0.0, 0.0}), MASK_SOLID, RayType_Infinite, TraceFilter_TraceYaw);
-	if (TR_DidHit(INVALID_HANDLE))
+	if (TR_DidHit(null))
 	{
-		TR_GetEndPosition(buffer_pos, INVALID_HANDLE);
+		TR_GetEndPosition(buffer_pos, null);
 		heigh = GetVectorDistance(buffer_pos, pos_rescue);
 	}
 	
@@ -1881,18 +1881,16 @@ int TraceYawEntity(float map_pos[3], float buffer_ang[3])
 	
 	MovePos_Forward(pos_end, buffer_ang, ROOM_SCAN_MAX_DISTANCE);
 	
-	Handle trace = TR_TraceHullFilterEx(pos_start, pos_end, view_as<float>({-2.5, -2.5, -2.5}), view_as<float>({2.5, 2.5, 2.5}), MASK_SOLID, TraceFilter_TraceYaw);
-	if (TR_DidHit(trace))
+	TR_TraceHullFilter(pos_start, pos_end, view_as<float>({-2.5, -2.5, -2.5}), view_as<float>({2.5, 2.5, 2.5}), MASK_SOLID, TraceFilter_TraceYaw);
+	if (TR_DidHit(null))
 	{
-		int entity = TR_GetEntityIndex(trace);
+		int entity = TR_GetEntityIndex(null);
 		if (entity && IsEntityValid(entity))
 		{
-			delete trace;
 			return entity;
 		}
 	}
 	
-	delete trace;
 	return 0;
 }
 
@@ -1922,67 +1920,46 @@ float TraceYawDistance(float map_pos[3], float buffer_ang[3])
 	
 	MovePos_Forward(pos_end, buffer_ang, ROOM_SCAN_MAX_DISTANCE);
 	
-	Handle trace = TR_TraceHullFilterEx(pos_start, pos_end, view_as<float>({-2.5, -2.5, -2.5}), view_as<float>({2.5, 2.5, 2.5}), MASK_SOLID, TraceFilter_TraceYaw);
-	if (TR_DidHit(trace))
+	TR_TraceHullFilter(pos_start, pos_end, view_as<float>({-2.5, -2.5, -2.5}), view_as<float>({2.5, 2.5, 2.5}), MASK_SOLID, TraceFilter_TraceYaw);
+	if (TR_DidHit(null))
 	{
-		TR_GetEndPosition(pos_end, trace);
+		TR_GetEndPosition(pos_end, null);
 		
 		float distance = GetVectorDistance(pos_start, pos_end);
 		
-		delete trace;
 		return distance;
 	}
 	
-	delete trace;
 	return 0.0;
 }
 
-
-// проверяет небо, если есть то вернет true
 bool IsSkyCheck(float origin[3], float step = 5.0)
 {
 	float vec_origin[3];
 	vec_origin = origin;
 	
-	if (!IsSkyAbove(vec_origin)) // 5
+	if (!IsSkyAbove(vec_origin))
 	{
-		vec_origin[0] += step; // 6
+		vec_origin[0] += step;
 		
 		if (!IsSkyAbove(vec_origin))
 		{
-			vec_origin[1] += step; // 3
-			
+			vec_origin[0] -= step;
+			vec_origin[1] += step;
+						
 			if (!IsSkyAbove(vec_origin))
 			{
-				vec_origin[0] -= step; // 2
+				vec_origin[0] -= step;
+				vec_origin[1] -= step;
 								
 				if (!IsSkyAbove(vec_origin))
 				{
-					vec_origin[0] -= step; // 1
+					vec_origin[0] += step;
+					vec_origin[1] -= step;
 					
 					if (!IsSkyAbove(vec_origin))
 					{
-						vec_origin[1] -= step; // 4
-					
-						if (!IsSkyAbove(vec_origin))
-						{
-							vec_origin[1] -= step; // 7		
-							
-							if (!IsSkyAbove(vec_origin))
-							{
-								vec_origin[0] += step; // 8
-								
-								if (!IsSkyAbove(vec_origin))
-								{
-									vec_origin[0] += step; // 9
-									
-									if (!IsSkyAbove(vec_origin))
-									{
-										return false;
-									}
-								}
-							}
-						}
+						return false;
 					}
 				}
 			}
@@ -1992,40 +1969,24 @@ bool IsSkyCheck(float origin[3], float step = 5.0)
 	return true;
 }
 
-bool IsSkyAbove(float origin[3])
+char inc_buffer[PLATFORM_MAX_PATH];
+
+bool IsSkyAbove(float origin[3], float mins[3] = {-5.0, -5.0, -1.0}, float maxs[3] = {5.0, 5.0, 10.0})
 {
-	float vec_mins[3];
-	vec_mins[0] = -5.0;
-	vec_mins[1] = vec_mins[0];
-	vec_mins[2] = 0.0;
-	
-	float vec_maxs[3];
-	vec_maxs[0] = 5.0;
-	vec_maxs[1] = vec_maxs[0];
-	vec_maxs[2] = 10.0;
-	
-	float pos_start[3];
-	pos_start = origin;
-	
 	float pos_end[3];
-	pos_end = pos_start;
+	pos_end = origin;
 	
 	float ang_sky[3];
 	ang_sky[0] = -90.0;
 	MovePos_Forward(pos_end, ang_sky, 10000.0);
 	
-	Handle trace = TR_TraceHullFilterEx(pos_start, pos_end, vec_mins, vec_maxs, MASK_SOLID, TraceFilter_SkyCheck);
-	
-	char surface[64];
-	
-	if (TR_DidHit(trace))
+	TR_TraceHullFilter(origin, pos_end, mins, maxs, MASK_SOLID, TraceFilter_SkyCheck);
+	if (TR_DidHit(null))
 	{
-		TR_GetSurfaceName(trace, surface, sizeof(surface));
+		TR_GetSurfaceName(null, inc_buffer, sizeof(inc_buffer));
 	}
 	
-	delete trace;
-	
-	if (!strcmp(surface, "TOOLS/TOOLSSKYBOX"))
+	if (!strcmp(inc_buffer, "TOOLS/TOOLSSKYBOX"))
 	{
 		return true;
 	}
@@ -2033,22 +1994,33 @@ bool IsSkyAbove(float origin[3])
 	return false;
 }
 
+char inc_classname[MAX_NAME_LENGTH];
+
 bool TraceFilter_SkyCheck(int entity, int contentsMask, int client)
 {
+	if (entity == -1)
+	{
+		return false;
+	}
+	
 	if (entity > 0 && entity <= MaxClients)
 	{
 		return false;
 	}
 	
-	char classname[MAX_CLASSNAME_LENGTH];
-	GetEntityClassname(entity, classname, sizeof(classname));
-	
-	if (!strcmp(classname, "infected") || !strcmp(classname, "witch"))
+	if (!IsValidEntity(entity))
 	{
 		return false;
 	}
 	
-	if (!strcmp(classname, "func_playerinfected_clip"))
+	GetEntityClassname(entity, inc_classname, sizeof(inc_classname));
+	
+	if (!strcmp(inc_classname, "infected") || !strcmp(inc_classname, "witch"))
+	{
+		return false;
+	}
+	
+	if (!strcmp(inc_classname, "func_playerinfected_clip"))
 	{
 		return false;
 	}
@@ -2798,12 +2770,11 @@ bool IsVisible(int client, int entity)
 	
 	MovePos_Forward(pos_end, ang_client, 10.0);
 	
-	Handle trace = TR_TraceRayFilterEx(pos_start, pos_end, MASK_VISIBLE, RayType_EndPoint, TraceFilter_Visible);
-	if (TR_DidHit(trace))
+	TR_TraceRayFilter(pos_start, pos_end, MASK_VISIBLE, RayType_EndPoint, TraceFilter_Visible);
+	if (TR_DidHit(null))
 	{
-		int index = TR_GetEntityIndex(trace);
-		delete trace;
-		
+		int index = TR_GetEntityIndex(null);
+				
 		if (index == entity)
 		{
 			return true;
@@ -2812,7 +2783,6 @@ bool IsVisible(int client, int entity)
 		return false;
 	}
 	
-	delete trace;
 	return true;
 }
 
